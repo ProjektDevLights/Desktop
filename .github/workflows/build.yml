@@ -1,0 +1,33 @@
+name: build
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install tools
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15
+      - name: Install dependencies
+        run: yarn install
+      - name: Package linux
+        run: yarn package -l
+      - name: Upload linux build
+        uses: actions/upload-artifact@v1
+        with:
+          name: DevLightsDesktop-linux.deb
+          path: release/
+                - name: Package linux
+        run: yarn package -l
+      - name: Package windows
+        run: yarn package -w
+      - name: Upload windows build
+        uses: actions/upload-artifact@v1
+        with:
+          name: DevLightsDesktop-win.exe
+          path: release/

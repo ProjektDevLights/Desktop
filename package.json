@@ -30,8 +30,8 @@
     ]
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "DevLightsDesktop",
+    "appId": "de.devlights.desktop",
     "files": [
       "dist/",
       "node_modules/",
@@ -70,11 +70,17 @@
         "nsis"
       ]
     },
+    "nsis": {
+      "artifactName": "${productName}-${os}.${ext}"
+    },
+    "deb": {
+      "artifactName": "${productName}-${os}.${ext}"
+    },
     "linux": {
       "target": [
         "deb"
       ],
-      "category": "Development"
+      "category": "Utilities"
     },
     "directories": {
       "app": "src",
@@ -86,8 +92,8 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "ProjektKursInfo",
+      "repo": "DevLightsDesktop"
     }
   },
   "repository": {
@@ -253,6 +259,7 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@material-ui/core": "^4.11.3",
     "@material-ui/styles": "^4.11.3",
+    "clsx": "^1.1.1",
     "electron-debug": "^3.1.0",
     "electron-log": "^4.2.4",
     "electron-updater": "^4.3.4",
@@ -298,7 +305,5 @@
       "next"
     ]
   },
-  "husky": {
-
-  }
+  "husky": {}
 }

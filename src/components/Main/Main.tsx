@@ -1,5 +1,7 @@
 import { makeStyles, Theme } from '@material-ui/core';
 import React from 'react';
+import Appbar from '../Appbar';
+
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     background: theme.palette.background.default,
@@ -21,5 +23,9 @@ export interface MainProps {}
 export default function Main(props: MainProps) {
   const styles = useStyles();
 
-  return <div className={styles.root}></div>;
+  return (
+    <div className={styles.root}>
+      <Appbar />
+    </div>
+  );
 }

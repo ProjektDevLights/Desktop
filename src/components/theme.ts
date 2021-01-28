@@ -5,10 +5,10 @@ const theme = (dark: boolean) => {
     palette: {
       type: dark ? 'dark' : 'light',
       primary: {
-        main: '#1DE9B6',
+        main: dark ? '#1DE9B6' : '#FF9800',
       },
       secondary: {
-        main: '#FF9800',
+        main: dark ? '#FF9800' : '#1DE9B6',
       },
     },
     typography: {
