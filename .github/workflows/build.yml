@@ -22,8 +22,6 @@ jobs:
         with:
           name: DevLightsDesktop-linux.deb
           path: release/
-      - name: Package linux
-        run: yarn package -l
       - name: Package windows
         run: yarn package -w
       - name: Upload windows build
