@@ -5,7 +5,7 @@ on:
     branches:
       - master
 jobs:
-  install:
+  build-linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,6 +22,16 @@ jobs:
         with:
           name: DevLightsDesktop-linux.deb
           path: release/
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install tools
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15
+      - name: Install dependencies
+        run: yarn install
       - name: Package windows
         run: yarn package -w
       - name: Upload windows build
