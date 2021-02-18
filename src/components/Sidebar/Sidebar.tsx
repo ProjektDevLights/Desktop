@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
+    height: '100vh',
   },
   drawerPaper: {
     transition: theme.customs.colorTransition,

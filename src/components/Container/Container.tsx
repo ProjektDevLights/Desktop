@@ -9,16 +9,22 @@ import Settings from '../Settings';
 import Sidebar from '../Sidebar';
 import { drawerWidth } from '../Sidebar/Sidebar';
 
+const spacing = 4;
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     background: theme.palette.background.default,
     width: '100vw',
     height: `100vh`,
     transition: theme.customs.colorTransition,
+    position: 'absolute',
+    zIndex: -1,
   },
   container: {
-    paddingTop: appbarHeight + theme.spacing(2),
-    paddingLeft: drawerWidth + theme.spacing(2),
+    position: 'absolute',
+    width: `calc(100vw - ${drawerWidth + theme.spacing(spacing)*2}px)`,
+    top: appbarHeight + theme.spacing(spacing),
+    right: theme.spacing(spacing),
+    left: drawerWidth + theme.spacing(spacing),
   },
 }));
 
@@ -29,6 +35,7 @@ export default function Container() {
     <div className={styles.root}>
       <Appbar />
       <Sidebar />
+
       <div className={styles.container}>
         <Switch>
           <Route exact path="/home" component={Home} />
