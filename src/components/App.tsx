@@ -4,15 +4,14 @@ import Container from './Container';
 import { LightsProvider } from './LightsProvider';
 import ThemeProvider from './ThemeProvider';
 import ThemeSwitchProvider from './ThemeSwitchProvider';
-
 export default function App() {
   return (
     <ThemeSwitchProvider>
       <ThemeProvider>
         <LightsProvider>
-        <Router initialEntries={['/home']}>
-          <Container />
-        </Router>
+          <Router initialEntries={['/home']}>
+            <Container />
+          </Router>
         </LightsProvider>
       </ThemeProvider>
     </ThemeSwitchProvider>

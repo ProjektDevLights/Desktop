@@ -33,6 +33,7 @@
     "productName": "DevLightsDesktop",
     "appId": "de.devlights.desktop",
     "files": [
+      "assets",
       "dist/",
       "node_modules/",
       "index.html",
@@ -77,6 +78,7 @@
       "artifactName": "${productName}-${os}.${ext}"
     },
     "linux": {
+      "icon": "./assets/icon.png",
       "target": [
         "deb"
       ],
@@ -92,8 +94,8 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "ProjektKursInfo",
-      "repo": "DevLightsDesktop"
+      "owner": "ProjektDevLights",
+      "repo": "Desktop"
     }
   },
   "repository": {
