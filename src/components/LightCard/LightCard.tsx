@@ -8,12 +8,12 @@ import {
   Typography,
 } from '@material-ui/core';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import tinycolor from 'tinycolor2';
 import BrightnessSlider from '../BrightnessSlider';
 import { useLight } from '../LightProvider';
 import Powerbulb from '../PowerBulb';
 import TagChip from '../TagChip';
-
 const getBackground = (light: Light): string => {
   if (light.isOn) {
     switch (light.leds.pattern) {
@@ -31,9 +31,12 @@ const getBackground = (light: Light): string => {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     marginTop: theme.spacing(2),
+    marginRight: theme.spacing(3),
+    borderRadius: 20,
+  },
+  card: {
     width: 400,
     height: 200,
-    marginRight: theme.spacing(3),
     borderRadius: 20,
   },
   paper: {
@@ -62,11 +65,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 function LightCard() {
   const light = useLight();
-
   const styles = useStyles(light);
-
+  const history = useHistory();
   return (
-    <Card className={styles.root}>
+    <Card
+      onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        history.push(`/home/light/${light.id}`);
+      }}
+      className={styles.card}
+    >
       <Paper className={styles.paper} square elevation={0}>
         <Typography variant="h5" className={styles.name}>
           {light.name}

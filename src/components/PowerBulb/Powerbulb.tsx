@@ -2,7 +2,7 @@ import { Light } from '@devlights/types';
 import { faLightbulb as faLightbulbRegular } from '@fortawesome/free-regular-svg-icons';
 import { faLightbulb as faLightbulbSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { makeStyles, Theme } from '@material-ui/core';
+import { IconButton, makeStyles, Theme } from '@material-ui/core';
 import React from 'react';
 import tinycolor from 'tinycolor2';
 import { useLight } from '../LightProvider';
@@ -25,10 +25,17 @@ const getColor = (light: Light): string => {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     position: 'absolute',
-    top: theme.spacing(2),
-    right: theme.spacing(2),
+    top: theme.spacing(0.5),
+    right: theme.spacing(0.5),
+    width: 50,
+    height: 50,
     cursor: 'pointer',
     color: (light: Light) => getColor(light),
+    transition: theme.customs.colorTransition,
+  },
+  icon: {
+    width: '30px !important',
+    height: '30px !important',
   },
 }));
 const Powerbulb = () => {
@@ -36,16 +43,22 @@ const Powerbulb = () => {
   const { isOn, id } = light;
   const { toggleOn } = useLights();
   const styles = useStyles(light);
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    e.stopPropagation();
+    e.preventDefault();
     toggleOn(id);
   };
   return (
-    <FontAwesomeIcon
-      size="2x"
+    <IconButton
       className={styles.root}
       onClick={handleClick}
-      icon={isOn ? faLightbulbSolid : faLightbulbRegular}
-    />
+      onMouseDown={(e: MouseEvent) => e.stopPropagation()}
+    >
+      <FontAwesomeIcon
+        className={styles.icon}
+        icon={isOn ? faLightbulbSolid : faLightbulbRegular}
+      />
+    </IconButton>
   );
 };
 

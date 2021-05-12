@@ -2,11 +2,8 @@ import { Slider, SliderProps } from '@material-ui/core';
 import React from 'react';
 import { useLight } from '../LightProvider';
 
-export interface BrightnessSliderProps extends SliderProps {}
-
-const BrightnessSlider = (props: BrightnessSliderProps) => {
+const BrightnessSlider = (props: SliderProps) => {
   const light = useLight();
-  console.log(light.brightness);
   return (
     <Slider
       color="secondary"
@@ -16,12 +13,14 @@ const BrightnessSlider = (props: BrightnessSliderProps) => {
         { value: 128, label: '50%' },
         { value: 255, label: '100%' },
       ]}
-      valueLabelFormat={(x: number) => Math.round((x / 255) * 100) + '%'}
+      valueLabelFormat={(x: number) => `${Math.round((x / 255) * 100)}%`}
       defaultValue={light.brightness}
       disabled={!light.isOn}
-      onChangeCommitted={(event: object, value: number) =>
-        light.setBrightness(value)
-      }
+      onMouseDown={(e: MouseEvent) => e.stopPropagation()}
+      onClick={(e: MouseEvent) => e.stopPropagation()}
+      onChangeCommitted={(event: React.ChangeEvent, value: number) => {
+        light.setBrightness(value);
+      }}
       min={1}
       max={255}
       {...props}

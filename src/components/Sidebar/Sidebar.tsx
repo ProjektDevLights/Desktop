@@ -1,18 +1,12 @@
 import { faClock, faCog, faHome } from '@fortawesome/free-solid-svg-icons';
-import { Drawer, List, Theme, useTheme } from '@material-ui/core';
+import { Drawer, List, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { appbarHeight } from '../Appbar/Appbar';
 import SidebarItem from '../SidebarItem';
 
 export const drawerWidth = 240;
-export enum SidebarCategory {
-  HOME,
-  ALARM,
-  SETTINGS,
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
   drawer: {
     width: drawerWidth,
@@ -23,7 +17,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     transition: theme.customs.colorTransition,
     border: 'none',
     width: drawerWidth,
-    //background: 'transparent',
   },
   toolbar: {
     overflow: 'auto',
@@ -32,14 +25,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 const Sidebar = () => {
   const styles = useStyles();
-  const theme = useTheme();
   const history = useHistory();
-  const [active, setActive] = React.useState<SidebarCategory>(
-    SidebarCategory.HOME
-  );
-  const handleItemPress = (item: SidebarCategory) => {
-    setActive(item);
-    history.push(`/${SidebarCategory[item].toLowerCase()}`);
+  const location = useLocation().pathname.split('/')[1];
+  const handleItemPress = (to: string) => {
+    history.push(`/${to}`);
   };
 
   return (
@@ -53,20 +42,20 @@ const Sidebar = () => {
       <div className={styles.toolbar}>
         <List>
           <SidebarItem
-            active={active === SidebarCategory.HOME}
-            onClick={() => handleItemPress(SidebarCategory.HOME)}
+            active={location === 'home'}
+            onClick={() => handleItemPress('home')}
             label="Home"
             icon={faHome}
           />
           <SidebarItem
-            active={active === SidebarCategory.ALARM}
-            onClick={() => handleItemPress(SidebarCategory.ALARM)}
+            active={location === 'alarm'}
+            onClick={() => handleItemPress('alarm')}
             label="Alarm"
             icon={faClock}
           />
           <SidebarItem
-            active={active === SidebarCategory.SETTINGS}
-            onClick={() => handleItemPress(SidebarCategory.SETTINGS)}
+            active={location === 'settings'}
+            onClick={() => handleItemPress('settings')}
             label="Settings"
             icon={faCog}
           />

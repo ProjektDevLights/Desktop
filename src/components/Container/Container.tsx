@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import Alarm from '../Alarm';
 import Appbar from '../Appbar';
 import { appbarHeight } from '../Appbar/Appbar';
-import Home from '../Home';
+import HomeSwitch from '../HomeSwitch/HomeSwitch';
 import Settings from '../Settings';
 import Sidebar from '../Sidebar';
 import { drawerWidth } from '../Sidebar/Sidebar';
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   container: {
     position: 'absolute',
-    width: `calc(100vw - ${drawerWidth + theme.spacing(spacing)*2}px)`,
+    width: `calc(100vw - ${drawerWidth + theme.spacing(spacing) * 2}px)`,
     top: appbarHeight + theme.spacing(spacing),
     right: theme.spacing(spacing),
     left: drawerWidth + theme.spacing(spacing),
@@ -38,7 +38,7 @@ export default function Container() {
 
       <div className={styles.container}>
         <Switch>
-          <Route exact path="/home" component={Home} />
+          <Route exact path="/home" component={HomeSwitch} />
           <Route exact path="/alarm" component={Alarm} />
           <Route exact path="/settings" component={Settings} />
         </Switch>
