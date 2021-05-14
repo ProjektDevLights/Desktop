@@ -1,1 +1,1 @@
-export { default } from "./LightCard";
+export { default } from './LightCard';

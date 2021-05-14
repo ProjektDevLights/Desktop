@@ -5,7 +5,7 @@ import { find, findIndex, merge } from 'lodash';
 import React from 'react';
 import config from '../../config.json';
 
-type AxiosReturn<T> = Promise<AxiosResponse<Response<T>>>;
+export type AxiosReturn<T> = Promise<AxiosResponse<Response<T>>>;
 export interface LightsContextType {
   lights: Light[];
   fetch: () => void;
@@ -17,8 +17,8 @@ export interface LightsContextType {
 const defaults: LightsContextType = {
   lights: [],
   fetch: () => {},
-  toggleOn: () => undefined,
-  setBrightness: () => undefined,
+  toggleOn: () => (undefined as unknown) as AxiosReturn<Light>,
+  setBrightness: () => (undefined as unknown) as AxiosReturn<Light>,
   getWithId: () => undefined,
 };
 
@@ -81,7 +81,7 @@ export default function LightsProvider(props: LightsProviderProps) {
       updateLight(id, { isOn: response.data.object.isOn });
     });
     ax.catch((err: AxiosError) => {
-      console.error(err);
+      console.error(err.isAxiosError);
     });
     return ax;
   };

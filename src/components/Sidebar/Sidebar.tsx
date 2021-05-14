@@ -10,8 +10,7 @@ export const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) => ({
   drawer: {
     width: drawerWidth,
-    flexShrink: 0,
-    height: '100vh',
+    flexShrink: 1,
   },
   drawerPaper: {
     transition: theme.customs.colorTransition,

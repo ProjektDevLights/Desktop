@@ -1,9 +1,12 @@
-import { Slider, SliderProps } from '@material-ui/core';
+import { Slider, SliderProps, Theme } from '@material-ui/core';
+import { useTheme } from '@material-ui/styles';
 import React from 'react';
 import { useLight } from '../LightProvider';
+import { LightContextType } from '../LightProvider/LightProvider';
 
 const BrightnessSlider = (props: SliderProps) => {
-  const light = useLight();
+  const light: LightContextType = useLight();
+  const theme: Theme = useTheme();
   return (
     <Slider
       color="secondary"
@@ -20,6 +23,9 @@ const BrightnessSlider = (props: SliderProps) => {
       onClick={(e: MouseEvent) => e.stopPropagation()}
       onChangeCommitted={(event: React.ChangeEvent, value: number) => {
         light.setBrightness(value);
+      }}
+      style={{
+        transition: theme.customs.colorTransition,
       }}
       min={1}
       max={255}

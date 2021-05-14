@@ -1,12 +1,12 @@
 import { Light } from '@devlights/types';
 import {
-  Card,
-  CardContent,
+  ButtonBase,
+  Grid,
   makeStyles,
-  Paper,
   Theme,
   Typography,
 } from '@material-ui/core';
+import clsx from 'clsx';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import tinycolor from 'tinycolor2';
@@ -28,33 +28,20 @@ const getBackground = (light: Light): string => {
     return '#000';
   }
 };
+const getTextColor = (light: Light): string => {
+  if (light.isOn) {
+    return tinycolor(light.leds.colors[0]).isLight() ? '#000' : '#fff';
+  }
+  return '#fff';
+};
+
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    marginTop: theme.spacing(2),
-    marginRight: theme.spacing(3),
-    borderRadius: 20,
-  },
-  card: {
     width: 400,
     height: 200,
-    borderRadius: 20,
-  },
-  paper: {
-    background: (light: Light) => getBackground(light),
-    height: '40%',
-    position: 'relative',
-    transition: theme.customs.colorTransition,
-  },
-  name: {
-    color: (light: Light) =>
-      light.isOn
-        ? tinycolor(light.leds.colors[0]).isLight()
-          ? '#000'
-          : '#fff'
-        : '#fff',
-    position: 'relative',
-    top: theme.spacing(2),
-    left: theme.spacing(2),
+    borderRadius: theme.shape.borderRadius * 2,
+    overflow: 'hidden',
+    boxShadow: theme.shadows[3],
   },
   slider: {
     marginTop: theme.spacing(2),
@@ -62,34 +49,71 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: theme.spacing(1),
     width: `calc(100% - ${theme.spacing(1) * 2}px)`,
   },
+  grid_container: {
+    width: '100%',
+    height: '100%',
+    flexWrap: 'nowrap',
+  },
+  grid_item: {
+    width: '100%',
+    maxWidth: '100%',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+  },
+  grid_item_top: {
+    paddingTop: theme.spacing(2),
+    transition: theme.customs.colorTransition,
+    backgroundColor: (light: Light) => getBackground(light),
+  },
+  grid_item_bottom: {
+    padding: theme.spacing(2),
+    textAlign: 'left',
+    backgroundColor: theme.palette.background.paper,
+  },
+  name: {
+    color: (light: Light) => getTextColor(light),
+    position: 'absolute',
+    top: theme.spacing(2),
+    left: theme.spacing(2),
+  },
 }));
-function LightCard() {
+
+export default function LightCard() {
   const light = useLight();
   const styles = useStyles(light);
   const history = useHistory();
+
   return (
-    <Card
-      onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    <ButtonBase
+      className={styles.root}
+      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
         history.push(`/home/light/${light.id}`);
       }}
-      className={styles.card}
     >
-      <Paper className={styles.paper} square elevation={0}>
-        <Typography variant="h5" className={styles.name}>
-          {light.name}
-        </Typography>
-        <Powerbulb />
-      </Paper>
-      <CardContent>
-        {light.tags?.map((tag: string, index: number) => (
-          <TagChip key={index} tag={tag} />
-        ))}
-        <BrightnessSlider className={styles.slider} />
-      </CardContent>
-    </Card>
+      <Grid container direction="column" className={styles.grid_container}>
+        <Grid
+          sm={6}
+          item
+          className={clsx(styles.grid_item, styles.grid_item_top)}
+        >
+          <Powerbulb />
+          <Typography variant="h5" className={styles.name}>
+            {light.name}
+          </Typography>
+        </Grid>
+        <Grid
+          sm={6}
+          item
+          className={clsx(styles.grid_item, styles.grid_item_bottom)}
+        >
+          {light.tags?.map((tag: string) => (
+            <TagChip key={tag} tag={tag} />
+          ))}
+          <BrightnessSlider className={styles.slider} />
+        </Grid>
+      </Grid>
+    </ButtonBase>
   );
 }
-
-export default LightCard;

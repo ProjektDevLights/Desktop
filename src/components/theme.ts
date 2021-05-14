@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core';
+import { createMuiTheme, Theme } from '@material-ui/core';
 
 declare module '@material-ui/core/styles/createMuiTheme' {
   interface Theme {
@@ -14,8 +14,28 @@ declare module '@material-ui/core/styles/createMuiTheme' {
   }
 }
 
+const defaultTheme = (dark: boolean): Theme =>
+  createMuiTheme({ palette: { type: dark ? 'dark' : 'light' } });
 const theme = (dark: boolean) => {
   return createMuiTheme({
+    overrides: {
+      MuiCssBaseline: {
+        '@global': {
+          body: {
+            margin: 0,
+            '&::-webkit-scrollbar': {
+              backgroundColor: defaultTheme(dark).palette.background.paper,
+            },
+            '&::-webkit-scrollbar-thumb': {
+              background: !dark
+                ? `linear-gradient(180deg, rgb(74,237,196), rgb(20,163,127))`
+                : `linear-gradient(180deg, rgb(255,172,51), rgb(178,106,0))`,
+              borderRadius: 10,
+            },
+          },
+        },
+      },
+    },
     props: {
       MuiTypography: {
         color: 'textPrimary',

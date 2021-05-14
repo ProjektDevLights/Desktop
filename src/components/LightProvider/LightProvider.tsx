@@ -1,10 +1,11 @@
 import { Light } from '@devlights/types';
 import React from 'react';
 import { useLights } from '../LightsProvider';
+import { AxiosReturn } from '../LightsProvider/LightsProvider';
 
 export interface LightContextType extends Light {
-  setBrightness: (brightness: number) => void;
-  toggleOn: () => void;
+  setBrightness: (brightness: number) => AxiosReturn<Light>;
+  toggleOn: () => AxiosReturn<Light>;
   fetch: () => void;
 }
 const defaults: LightContextType = {
@@ -17,8 +18,8 @@ const defaults: LightContextType = {
     pattern: 'plain',
   },
   name: 'default',
-  setBrightness: () => undefined,
-  toggleOn: () => undefined,
+  setBrightness: () => (undefined as unknown) as AxiosReturn<Light>,
+  toggleOn: () => (undefined as unknown) as AxiosReturn<Light>,
   fetch: () => undefined,
 };
 export const LightContext = React.createContext<LightContextType>(defaults);
@@ -29,14 +30,14 @@ export interface LightProviderProps {
 const LightProvider = (props: LightProviderProps) => {
   const { id, children } = props;
   const lights = useLights();
-  const setBrightness = (brightness: number) => {
-    lights.setBrightness(id, brightness);
+  const setBrightness = (brightness: number): AxiosReturn<Light> => {
+    return lights.setBrightness(id, brightness);
   };
-  const toggleOn = () => {
-    lights.toggleOn(id);
+  const toggleOn = (): AxiosReturn<Light> => {
+    return lights.toggleOn(id);
   };
   const fetch = () => {
-    lights.fetch();
+    return lights.fetch();
   };
   return (
     <LightContext.Provider

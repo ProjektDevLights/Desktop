@@ -1,3 +1,4 @@
+import { CssBaseline } from '@material-ui/core';
 import React from 'react';
 import { MemoryRouter as Router } from 'react-router-dom';
 import Container from './Container';
@@ -9,6 +10,7 @@ export default function App() {
   return (
     <ThemeSwitchProvider>
       <ThemeProvider>
+        <CssBaseline />
         <LightsProvider>
           <Router initialEntries={['/home']}>
             <Container />

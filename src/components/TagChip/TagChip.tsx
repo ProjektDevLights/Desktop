@@ -23,7 +23,7 @@ const TagChip = (props: TagChipProps) => {
   return (
     <Chip
       size="small"
-      onClick={(e) => e.stopPropagation()}
+      onClick={(e: React.MouseEvent<HTMLElement>) => e.stopPropagation()}
       onMouseDown={(e) => e.stopPropagation()}
       avatar={
         <FontAwesomeIcon size="xs" className={styles.icon} icon={faHashtag} />

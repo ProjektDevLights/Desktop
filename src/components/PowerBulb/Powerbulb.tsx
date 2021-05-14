@@ -43,7 +43,7 @@ const Powerbulb = () => {
   const { isOn, id } = light;
   const { toggleOn } = useLights();
   const styles = useStyles(light);
-  const handleClick = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     e.preventDefault();
     toggleOn(id);
@@ -52,7 +52,9 @@ const Powerbulb = () => {
     <IconButton
       className={styles.root}
       onClick={handleClick}
-      onMouseDown={(e: MouseEvent) => e.stopPropagation()}
+      onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) =>
+        e.stopPropagation()
+      }
     >
       <FontAwesomeIcon
         className={styles.icon}
