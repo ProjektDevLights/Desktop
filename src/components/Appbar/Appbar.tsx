@@ -10,6 +10,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import AppbarContainer from '../AppbarContainer';
 import AppbarItem from '../AppbarItem';
+import BackButton from '../BackButton';
 import ThemeSwitch from '../ThemeSwitch';
 import { useThemeSwitch } from '../ThemeSwitchProvider';
 
@@ -30,6 +31,9 @@ function Appbar() {
     <AppBar className={styles.appBar} position="fixed">
       <Toolbar>
         <AppbarContainer>
+          <AppbarItem left>
+            <BackButton />
+          </AppbarItem>
           <AppbarItem center>
             <Typography variant="h4" color="initial">
               {location.pathname}

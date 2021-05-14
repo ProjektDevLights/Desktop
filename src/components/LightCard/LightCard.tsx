@@ -14,6 +14,7 @@ import BrightnessSlider from '../BrightnessSlider';
 import { useLight } from '../LightProvider';
 import Powerbulb from '../PowerBulb';
 import TagChip from '../TagChip';
+
 const getBackground = (light: Light): string => {
   if (light.isOn) {
     switch (light.leds.pattern) {

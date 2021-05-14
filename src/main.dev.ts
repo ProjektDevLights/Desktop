@@ -107,6 +107,18 @@ const createWindow = async () => {
     shell.openExternal(url);
   });
 
+  mainWindow.on('app-command', (e: Electron.Event, cmd: string) => {
+    if (cmd === 'browser-backward' && mainWindow?.webContents.canGoBack()) {
+      mainWindow.webContents.goBack();
+    }
+  });
+
+  mainWindow.on('app-command', (e: Electron.Event, cmd: string) => {
+    if (cmd === 'browser-forward' && mainWindow?.webContents.canGoForward()) {
+      mainWindow.webContents.goForward();
+    }
+  });
+
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();

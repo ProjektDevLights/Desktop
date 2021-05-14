@@ -3,7 +3,8 @@ import Response from '@devlights/types/src/Response';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { find, findIndex, merge } from 'lodash';
 import React from 'react';
-import config from '../../config.json';
+import { SnackbarContextType } from '../SnackbarProvider/SnackbarProvider';
+import useSnackbar from '../SnackbarProvider/useSnackbar';
 
 export type AxiosReturn<T> = Promise<AxiosResponse<Response<T>>>;
 export interface LightsContextType {
@@ -32,6 +33,8 @@ export default function LightsProvider(props: LightsProviderProps) {
 
   const [lights, setLights] = React.useState<Light[]>([]);
 
+  const snackbarController: SnackbarContextType = useSnackbar();
+
   const updateLight = (id: string, data: Partial<Light>) => {
     const lightsCopy = [...lights];
     const lightIndex: number = findIndex(
@@ -42,11 +45,9 @@ export default function LightsProvider(props: LightsProviderProps) {
     setLights(lightsCopy);
   };
   const fetch = () => {
-    axios
-      .get(`${config.baseUrl}/lights`)
-      .then((response: AxiosResponse<Response<Light[]>>) => {
-        setLights(response.data.object);
-      });
+    axios.get(`/lights`).then((response: AxiosResponse<Response<Light[]>>) => {
+      setLights(response.data.object);
+    });
   };
 
   const getWithId = (id: string): Light | undefined => {
@@ -57,17 +58,18 @@ export default function LightsProvider(props: LightsProviderProps) {
     id: string,
     brightness: number
   ): AxiosReturn<Light> => {
-    const ax: AxiosReturn<Light> = axios.patch(
-      `${config.baseUrl}/lights/${id}/brightness`,
-      {
-        brightness,
-      }
-    );
+    const ax: AxiosReturn<Light> = axios.patch(`/lights/${id}/brightness`, {
+      brightness,
+    });
     ax.then((response: AxiosResponse<Response<Light>>) => {
-      updateLight(id, { brightness: response.data.object.brightness });
+      snackbarController.showResponse(response);
+      updateLight(id, {
+        brightness:
+          response.data?.object?.brightness ?? getWithId(id)?.brightness,
+      });
     });
     ax.catch((err: AxiosError) => {
-      console.error(err);
+      snackbarController.showResponse(err.response);
     });
     return ax;
   };
@@ -75,13 +77,14 @@ export default function LightsProvider(props: LightsProviderProps) {
   const toggleOn = (id: string): AxiosReturn<Light> => {
     const light: Light | undefined = getWithId(id);
     const ax: AxiosReturn<Light> = axios.patch(
-      `${config.baseUrl}/lights/${id}/${light?.isOn ? 'off' : 'on'}`
+      `/lights/${id}/${light?.isOn ? 'off' : 'on'}`
     );
     ax.then((response: AxiosResponse<Response<Light>>) => {
+      snackbarController.showResponse(response);
       updateLight(id, { isOn: response.data.object.isOn });
     });
     ax.catch((err: AxiosError) => {
-      console.error(err.isAxiosError);
+      snackbarController.showResponse(err.response);
     });
     return ax;
   };
