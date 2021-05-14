@@ -27,7 +27,7 @@ const Sidebar = () => {
   const history = useHistory();
   const location = useLocation().pathname.split('/')[1];
   const handleItemPress = (to: string) => {
-    history.push(`/${to}`);
+    history.history.push(`/${to}`);
   };
 
   return (
