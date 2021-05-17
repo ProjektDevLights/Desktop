@@ -4,12 +4,20 @@ declare module '@material-ui/core/styles/createMuiTheme' {
   interface Theme {
     customs: {
       colorTransition: string;
+      presets: {
+        blend: Record<string, unknown>;
+        filter: Record<string, unknown>;
+      };
     };
   }
   // allow configuration using `createMuiTheme`
   interface ThemeOptions {
     customs?: {
       colorTransition?: string;
+      presets?: {
+        blend?: Record<string, unknown>;
+        filter?: Record<string, unknown>;
+      };
     };
   }
 }
@@ -58,6 +66,15 @@ const theme = (dark: boolean) => {
     },
     customs: {
       colorTransition: 'background 200ms cubic-bezier(0.87, 0, 0.13, 1) 0ms',
+      presets: {
+        filter: {
+          background: 'inherit',
+          '-webkit-background-clip': 'text',
+          color: 'transparent',
+          filter: 'invert(1) grayscale(1) contrast(100)',
+        },
+        blend: { mixBlendMode: 'difference', color: 'white' },
+      },
     },
   });
 };

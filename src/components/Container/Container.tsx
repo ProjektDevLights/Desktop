@@ -1,7 +1,10 @@
 import { makeStyles, Theme, Toolbar } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
+import { ipcRenderer } from 'electron';
+import { IpcRendererEvent } from 'electron/main';
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
+import Button from '../../shared/buttons';
 import Alarm from '../Alarm';
 import Appbar, { appbarHeight } from '../Appbar/Appbar';
 import HomeSwitch from '../HomeSwitch/HomeSwitch';
@@ -29,6 +32,15 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function Container() {
   const styles = useStyles();
   const theme: Theme = useTheme();
+  const history = useHistory();
+
+  ipcRenderer.on('button', (_event: IpcRendererEvent, button: Button) => {
+    if (button === Button.BACKWARD) {
+      history.goBack();
+    } else if (button === Button.FORWARD) {
+      history.goForward();
+    }
+  });
   console.log(theme.palette.primary);
   return (
     <div className={styles.root}>

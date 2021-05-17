@@ -1,8 +1,11 @@
 import Response from '@devlights/types/src/Response';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Snackbar, SnackbarCloseReason } from '@material-ui/core';
 import { Alert, Color } from '@material-ui/lab';
 import { AxiosResponse } from 'axios';
 import React from 'react';
+import {IconProp} from "@fortawesome/fontawesome-svg-core";
+import {faCheck, faExclamation, faExclamationTriangle, faInfo, faTimes} from "@fortawesome/free-solid-svg-icons";
 
 export interface SnackbarProviderProps {
   children: React.ReactNode;
@@ -66,7 +69,7 @@ export default function SnackbarProvider(props: SnackbarProviderProps) {
   };
 
   const handleClose = (
-    event: React.SyntheticEvent<any, Event>,
+    _event: React.SyntheticEvent<any, Event>,
     reason: SnackbarCloseReason
   ) => {
     if (reason === 'clickaway') {
@@ -74,17 +77,19 @@ export default function SnackbarProvider(props: SnackbarProviderProps) {
     }
     setOpen(false);
   };
+  const Icon = (icon: IconProp) => <FontAwesomeIcon style={{alignSelf: "center"}} size="xs" icon={icon} />;
 
   return (
     <SnackbarContext.Provider
       value={{
         show,
         showResponse,
+        forceClose
       }}
     >
       {props.children}
       <Snackbar open={open} onClose={handleClose} autoHideDuration={3000}>
-        <Alert onClose={handleClose} severity={severity}>
+        <Alert onClose={handleClose} severity={severity} action={<></>} iconMapping={{ error: Icon(faExclamation),info: Icon(faInfo) ,warning: Icon(faExclamationTriangle), success: Icon(faCheck) }}>
           {message}
         </Alert>
       </Snackbar>

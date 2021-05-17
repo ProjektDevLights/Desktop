@@ -1,7 +1,7 @@
 import { CssBaseline } from '@material-ui/core';
 import axios from 'axios';
 import React from 'react';
-import { BrowserRouter as Router, Redirect } from 'react-router-dom';
+import { MemoryRouter as Router } from 'react-router-dom';
 import config from '../config.json';
 import Container from './Container';
 import { LightsProvider } from './LightsProvider';
@@ -20,8 +20,7 @@ export default function App() {
         <CssBaseline />
         <SnackbarProvider>
           <LightsProvider>
-            <Router>
-              <Redirect to="/home" />
+            <Router initialEntries={['/home']}>
               <Container />
             </Router>
           </LightsProvider>

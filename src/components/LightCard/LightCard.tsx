@@ -1,40 +1,13 @@
-import { Light } from '@devlights/types';
-import {
-  ButtonBase,
-  Grid,
-  makeStyles,
-  Theme,
-  Typography,
-} from '@material-ui/core';
+import { ButtonBase, Grid, makeStyles, Theme } from '@material-ui/core';
 import clsx from 'clsx';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import tinycolor from 'tinycolor2';
 import BrightnessSlider from '../BrightnessSlider';
+import ContrastTypography from '../ContrastTypography';
+import LightBackground from '../LightBackground';
 import { useLight } from '../LightProvider';
 import Powerbulb from '../PowerBulb';
 import TagChip from '../TagChip';
-
-const getBackground = (light: Light): string => {
-  if (light.isOn) {
-    switch (light.leds.pattern) {
-      case 'plain':
-        return light.leds.colors[0];
-      case 'gradient':
-        return `linear-gradient(120deg, ${light.leds.colors[0]}, ${light.leds.colors[1]})`;
-      default:
-        return '';
-    }
-  } else {
-    return '#000';
-  }
-};
-const getTextColor = (light: Light): string => {
-  if (light.isOn) {
-    return tinycolor(light.leds.colors[0]).isLight() ? '#000' : '#fff';
-  }
-  return '#fff';
-};
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -63,8 +36,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   grid_item_top: {
     paddingTop: theme.spacing(2),
-    transition: theme.customs.colorTransition,
-    backgroundColor: (light: Light) => getBackground(light),
   },
   grid_item_bottom: {
     padding: theme.spacing(2),
@@ -72,7 +43,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: theme.palette.background.paper,
   },
   name: {
-    color: (light: Light) => getTextColor(light),
     position: 'absolute',
     top: theme.spacing(2),
     left: theme.spacing(2),
@@ -97,12 +67,17 @@ export default function LightCard() {
         <Grid
           sm={6}
           item
+          component={LightBackground}
           className={clsx(styles.grid_item, styles.grid_item_top)}
         >
           <Powerbulb />
-          <Typography variant="h5" className={styles.name}>
+          <ContrastTypography
+            variant="h5"
+            className={styles.name}
+            blend={light.leds.pattern === 'runner'}
+          >
             {light.name}
-          </Typography>
+          </ContrastTypography>
         </Grid>
         <Grid
           sm={6}

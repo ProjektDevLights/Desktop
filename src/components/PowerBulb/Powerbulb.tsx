@@ -1,27 +1,11 @@
-import { Light } from '@devlights/types';
 import { faLightbulb as faLightbulbRegular } from '@fortawesome/free-regular-svg-icons';
 import { faLightbulb as faLightbulbSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, makeStyles, Theme } from '@material-ui/core';
 import React from 'react';
-import tinycolor from 'tinycolor2';
 import { useLight } from '../LightProvider';
 import { useLights } from '../LightsProvider';
 
-const getColor = (light: Light): string => {
-  if (light.isOn) {
-    switch (light.leds.pattern) {
-      case 'plain':
-        return tinycolor(light.leds.colors[0]).isDark() ? '#fff' : '#000';
-      case 'gradient':
-        return tinycolor(light.leds.colors[1]).isDark() ? '#fff' : '#000';
-      default:
-        return '';
-    }
-  } else {
-    return '#fff';
-  }
-};
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     position: 'absolute',
@@ -30,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: 50,
     height: 50,
     cursor: 'pointer',
-    color: (light: Light) => getColor(light),
+    color: theme.palette.grey[500],
     transition: theme.customs.colorTransition,
   },
   icon: {

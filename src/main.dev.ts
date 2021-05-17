@@ -15,7 +15,7 @@ import { autoUpdater } from 'electron-updater';
 import path from 'path';
 import 'regenerator-runtime/runtime';
 import MenuBuilder from './menu';
-
+import Button from './shared/buttons';
 export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -108,14 +108,17 @@ const createWindow = async () => {
   });
 
   mainWindow.on('app-command', (e: Electron.Event, cmd: string) => {
-    if (cmd === 'browser-backward' && mainWindow?.webContents.canGoBack()) {
-      mainWindow.webContents.goBack();
+    if (cmd === 'browser-backward') {
+      console.log('back');
+      mainWindow?.webContents.send('button', Button.BACKWARD);
     }
   });
 
   mainWindow.on('app-command', (e: Electron.Event, cmd: string) => {
-    if (cmd === 'browser-forward' && mainWindow?.webContents.canGoForward()) {
-      mainWindow.webContents.goForward();
+    if (cmd === 'browser-forward') {
+      console.log('forward');
+
+      mainWindow?.webContents.send('button', Button.FORWARD);
     }
   });
 
