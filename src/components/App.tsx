@@ -13,6 +13,7 @@ axios.defaults.baseURL = config.baseUrl;
 axios.defaults.validateStatus = (status: number) => {
   return status >= 200 && status < 400;
 };
+
 export default function App() {
   return (
     <ThemeSwitchProvider>

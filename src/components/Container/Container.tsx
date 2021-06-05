@@ -41,7 +41,6 @@ export default function Container() {
       history.goForward();
     }
   });
-  console.log(theme.palette.primary);
   return (
     <div className={styles.root}>
       <Appbar />
@@ -50,9 +49,9 @@ export default function Container() {
       <div className={styles.container}>
         <Toolbar />
         <Switch>
-          <Route exact path="/home" component={HomeSwitch} />
-          <Route exact path="/alarm" component={Alarm} />
-          <Route exact path="/settings" component={Settings} />
+          <Route path="/home" component={HomeSwitch} />
+          <Route path="/alarm" component={Alarm} />
+          <Route path="/settings" component={Settings} />
         </Switch>
       </div>
     </div>

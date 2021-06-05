@@ -65,7 +65,7 @@ export default function LightCard() {
     >
       <Grid container direction="column" className={styles.grid_container}>
         <Grid
-          sm={6}
+          xs={6}
           item
           component={LightBackground}
           className={clsx(styles.grid_item, styles.grid_item_top)}
@@ -80,7 +80,7 @@ export default function LightCard() {
           </ContrastTypography>
         </Grid>
         <Grid
-          sm={6}
+          xs={6}
           item
           className={clsx(styles.grid_item, styles.grid_item_bottom)}
         >

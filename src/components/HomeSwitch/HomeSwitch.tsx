@@ -1,16 +1,28 @@
 import React from 'react';
-import { Route, RouteChildrenProps, Switch } from 'react-router-dom';
+import {
+  Route,
+  RouteChildrenProps,
+  Switch,
+  useHistory,
+} from 'react-router-dom';
 import Home from '../Home/Home';
+import { LightProvider } from '../LightProvider';
+import LightScreen from '../LightScreen/LightScreen';
 
 const HomeSwitch = () => {
+  const history = useHistory();
   return (
     <Switch>
-      <Route exact path="/home" component={Home} />
-      <Route path="/home/light/:light">
+      <Route exact path="/home/light/:light">
         {(props: RouteChildrenProps) => {
-          return <div>light screen</div>;
+          return (
+            <LightProvider id={props.match?.params.light}>
+              <LightScreen />
+            </LightProvider>
+          );
         }}
       </Route>
+      <Route exact path="/home" component={Home} />
     </Switch>
   );
 };

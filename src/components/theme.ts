@@ -22,6 +22,15 @@ declare module '@material-ui/core/styles/createMuiTheme' {
   }
 }
 
+declare module '@material-ui/core/styles/createPalette' {
+  interface Palette {
+    tertiary: Palette['primary'];
+  }
+  interface PaletteOptions {
+    tertiary?: PaletteOptions['primary'];
+  }
+}
+
 const defaultTheme = (dark: boolean): Theme =>
   createMuiTheme({ palette: { type: dark ? 'dark' : 'light' } });
 const theme = (dark: boolean) => {
@@ -56,6 +65,9 @@ const theme = (dark: boolean) => {
       },
       secondary: {
         main: dark ? '#FF9800' : '#1DE9B6',
+      },
+      tertiary: {
+        main: '#FF7D91',
       },
       background: {
         paper: dark ? '#ffffff14' : '#ebebeb',

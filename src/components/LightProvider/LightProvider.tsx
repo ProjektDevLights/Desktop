@@ -5,6 +5,7 @@ import { AxiosReturn } from '../LightsProvider/LightsProvider';
 
 export interface LightContextType extends Light {
   setBrightness: (brightness: number) => AxiosReturn<Light>;
+  setName: (name: string) => AxiosReturn<Light>;
   toggleOn: () => AxiosReturn<Light>;
   fetch: () => void;
 }
@@ -19,6 +20,7 @@ const defaults: LightContextType = {
   },
   name: 'default',
   setBrightness: () => (undefined as unknown) as AxiosReturn<Light>,
+  setName: () => (undefined as unknown) as AxiosReturn<Light>,
   toggleOn: () => (undefined as unknown) as AxiosReturn<Light>,
   fetch: () => undefined,
 };
@@ -33,6 +35,9 @@ const LightProvider = (props: LightProviderProps) => {
   const setBrightness = (brightness: number): AxiosReturn<Light> => {
     return lights.setBrightness(id, brightness);
   };
+  const setName = (name: string): AxiosReturn<Light> => {
+    return lights.setName(id, name);
+  };
   const toggleOn = (): AxiosReturn<Light> => {
     return lights.toggleOn(id);
   };
@@ -46,6 +51,7 @@ const LightProvider = (props: LightProviderProps) => {
         fetch,
         toggleOn,
         setBrightness,
+        setName,
       }}
     >
       {children}

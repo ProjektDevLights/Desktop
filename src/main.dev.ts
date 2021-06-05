@@ -109,15 +109,12 @@ const createWindow = async () => {
 
   mainWindow.on('app-command', (e: Electron.Event, cmd: string) => {
     if (cmd === 'browser-backward') {
-      console.log('back');
       mainWindow?.webContents.send('button', Button.BACKWARD);
     }
   });
 
   mainWindow.on('app-command', (e: Electron.Event, cmd: string) => {
     if (cmd === 'browser-forward') {
-      console.log('forward');
-
       mainWindow?.webContents.send('button', Button.FORWARD);
     }
   });

@@ -13,6 +13,7 @@ export interface LightsContextType {
   toggleOn: (id: string) => AxiosReturn<Light>;
   getWithId: (id: string) => Light | undefined;
   setBrightness: (id: string, brightness: number) => AxiosReturn<Light>;
+  setName: (id: string, name: string) => AxiosReturn<Light>;
 }
 
 const defaults: LightsContextType = {
@@ -20,6 +21,7 @@ const defaults: LightsContextType = {
   fetch: () => {},
   toggleOn: () => (undefined as unknown) as AxiosReturn<Light>,
   setBrightness: () => (undefined as unknown) as AxiosReturn<Light>,
+  setName: () => (undefined as unknown) as AxiosReturn<Light>,
   getWithId: () => undefined,
 };
 
@@ -74,6 +76,22 @@ export default function LightsProvider(props: LightsProviderProps) {
     return ax;
   };
 
+  const setName = (id: string, name: string): AxiosReturn<Light> => {
+    const ax: AxiosReturn<Light> = axios.patch(`/lights/${id}/update`, {
+      name,
+    });
+    ax.then((response: AxiosResponse<Response<Light>>) => {
+      snackbarController.showResponse(response);
+      updateLight(id, {
+        name: response.data?.object?.name ?? getWithId(id)?.name,
+      });
+    });
+    ax.catch((err: AxiosError) => {
+      snackbarController.showResponse(err.response);
+    });
+    return ax;
+  };
+
   const toggleOn = (id: string): AxiosReturn<Light> => {
     const light: Light | undefined = getWithId(id);
     const ax: AxiosReturn<Light> = axios.patch(
@@ -101,6 +119,7 @@ export default function LightsProvider(props: LightsProviderProps) {
         toggleOn,
         getWithId,
         setBrightness,
+        setName,
       }}
     >
       {children}
