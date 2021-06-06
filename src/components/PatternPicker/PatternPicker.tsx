@@ -1,4 +1,4 @@
-import { Pattern } from '@devlights/types';
+import { Pattern, UserPattern } from '@devlights/types';
 import {
   faFill,
   faPaintBrush,
@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { makeStyles } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import React from 'react';
+import { useLight } from '../LightProvider';
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2),
@@ -19,20 +20,30 @@ const useStyles = makeStyles((theme) => ({
     height: 52,
   },
 }));
-export interface PatternPickerProps {
-  pattern: Pattern;
-  onChange: (newPattern: string) => void;
-}
+export interface PatternPickerProps {}
 export default function PatternPicker(props: PatternPickerProps) {
   const styles = useStyles();
-  const [pattern, setPattern] = React.useState<Pattern>(props.pattern);
+  const light = useLight();
+  const [pattern, setPattern] = React.useState<Pattern>(light.leds.pattern);
+  const [prevPattern, setPrevPattern] = React.useState<Pattern>(
+    light.leds.pattern
+  );
 
   const handlePattern = (
     e: React.MouseEvent<HTMLElement>,
-    newPattern: Pattern
+    newPattern: UserPattern
   ) => {
-    setPattern(newPattern);
-    props.onChange(newPattern);
+    if (newPattern !== null) {
+      light
+        .setPattern(newPattern)
+        ?.then(() => {
+          setPrevPattern(newPattern);
+        })
+        .catch(() => {
+          setPattern(prevPattern);
+        });
+      setPattern(newPattern);
+    }
   };
   return (
     <ToggleButtonGroup

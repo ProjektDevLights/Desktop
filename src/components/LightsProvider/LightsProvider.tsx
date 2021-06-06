@@ -1,4 +1,4 @@
-import { Light } from '@devlights/types';
+import { Leds, Light } from '@devlights/types';
 import Response from '@devlights/types/src/Response';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { find, findIndex, merge } from 'lodash';
@@ -10,19 +10,21 @@ export type AxiosReturn<T> = Promise<AxiosResponse<Response<T>>>;
 export interface LightsContextType {
   lights: Light[];
   fetch: () => void;
-  toggleOn: (id: string) => AxiosReturn<Light>;
   getWithId: (id: string) => Light | undefined;
+  toggleOn: (id: string) => AxiosReturn<Light>;
   setBrightness: (id: string, brightness: number) => AxiosReturn<Light>;
   setName: (id: string, name: string) => AxiosReturn<Light>;
+  setLeds: (id: string, leds: Leds) => AxiosReturn<Light>;
 }
 
 const defaults: LightsContextType = {
   lights: [],
   fetch: () => {},
+  getWithId: () => undefined,
   toggleOn: () => (undefined as unknown) as AxiosReturn<Light>,
   setBrightness: () => (undefined as unknown) as AxiosReturn<Light>,
   setName: () => (undefined as unknown) as AxiosReturn<Light>,
-  getWithId: () => undefined,
+  setLeds: () => (undefined as unknown) as AxiosReturn<Light>,
 };
 
 export interface LightsProviderProps {
@@ -92,6 +94,22 @@ export default function LightsProvider(props: LightsProviderProps) {
     return ax;
   };
 
+  const setLeds = (id: string, leds: Leds): AxiosReturn<Light> => {
+    console.log(leds);
+    const ax: AxiosReturn<Light> = axios.patch(`/lights/${id}/color`, leds);
+    ax.then((response: AxiosResponse<Response<Light>>) => {
+      snackbarController.showResponse(response);
+      updateLight(id, {
+        leds: response.data?.object?.leds ?? getWithId(id)?.leds,
+      });
+    });
+    ax.catch((err: AxiosError) => {
+      console.log(err.request);
+      snackbarController.showResponse(err.response);
+    });
+    return ax;
+  };
+
   const toggleOn = (id: string): AxiosReturn<Light> => {
     const light: Light | undefined = getWithId(id);
     const ax: AxiosReturn<Light> = axios.patch(
@@ -120,6 +138,7 @@ export default function LightsProvider(props: LightsProviderProps) {
         getWithId,
         setBrightness,
         setName,
+        setLeds,
       }}
     >
       {children}

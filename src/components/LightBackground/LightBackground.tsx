@@ -99,7 +99,7 @@ export default function LightBackground(
           >
             <div
               className={styles.running_box}
-              style={{ transform: 'rotate(20deg) translateY(-50%)' }}
+              style={{ transform: 'rotate(20deg) translateY(-50%) scaleY(2)' }}
             />
           </Tween>
           {children}
