@@ -5,7 +5,16 @@ import { useLight } from '../../LightProvider';
 import PlainComponent from '../PlainComponent';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  sliderContainer: {},
+  root: {
+    minWidth: 350,
+  },
+  sliderGrid: {
+    height: '100%',
+  },
+  sliderContainer: {
+    position: 'relative',
+    height: '90%',
+  },
   slider: {
     height: '100%',
     alignSelf: 'center',
@@ -52,25 +61,32 @@ export default function RunnerComponent(props: RunnerComponentProps) {
   ];
 
   return (
-    <Grid container spacing={2}>
+    <Grid className={styles.root} container spacing={2} direction="row">
       <Grid item>
         <PlainComponent />
       </Grid>
-      <Grid className={styles.sliderContainer} item>
-        <Slider
-          value={speed}
-          min={0}
-          max={100}
-          marks={marks}
-          className={styles.slider}
-          orientation="vertical"
-          onChange={(e, value: number | number[]) => {
-            setSpeed(value as number);
-          }}
-          onChangeCommitted={(e, value: number | number[]) => {
-            light.setTimeout(percentageToSpeed(value as number));
-          }}
-        />
+      <Grid item>
+        <Grid container className={styles.sliderGrid}>
+          <div className={styles.sliderContainer}>
+            <Slider
+              value={speed}
+              min={0}
+              max={100}
+              marks={marks}
+              className={styles.slider}
+              orientation="vertical"
+              scale={(x) => {
+                return x * x;
+              }}
+              onChange={(e, value: number | number[]) => {
+                setSpeed(value as number);
+              }}
+              onChangeCommitted={(e, value: number | number[]) => {
+                light.setTimeout(percentageToSpeed(value as number));
+              }}
+            />
+          </div>
+        </Grid>
       </Grid>
     </Grid>
   );

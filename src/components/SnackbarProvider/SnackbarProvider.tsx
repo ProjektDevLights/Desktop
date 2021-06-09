@@ -44,7 +44,6 @@ export default function SnackbarProvider(props: SnackbarProviderProps) {
 
   const showResponse = (res?: AxiosResponse<Response<unknown>>) => {
     const status = res?.status ?? 500;
-    console.log(status);
     if (status === 304) {
       setMessage('Nothing Changed!');
     } else if (Array.isArray(res?.data.message)) {

@@ -14,7 +14,6 @@ import tinycolor from 'tinycolor2';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    overflow: 'hidden',
     borderRadius: theme.shape.borderRadius,
   },
   saturation: {
@@ -51,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   textField: {
     width: '100%',
+    maxWidth: 200,
   },
 }));
 

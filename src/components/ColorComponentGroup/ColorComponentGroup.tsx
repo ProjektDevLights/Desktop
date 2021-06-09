@@ -7,7 +7,6 @@ import { useLight } from '../LightProvider';
 export interface ColorComponentGroupProps {}
 export default function ColorComponentGroup(props: ColorComponentGroupProps) {
   const light = useLight();
-  console.log(light.leds.pattern);
   switch (light.leds.pattern) {
     case 'plain':
       return <PlainComponent />;

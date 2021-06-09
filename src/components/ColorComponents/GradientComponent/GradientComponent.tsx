@@ -18,7 +18,6 @@ export default function GradientComponent(props: GradientComponentProps) {
   );
 
   const handleComplete = (side: Side, color: string) => {
-    console.log('complete');
     if (side === Side.LEFT) {
       light.setColors([tinycolor(color).toHex(), light.leds.colors[1]]);
     } else {

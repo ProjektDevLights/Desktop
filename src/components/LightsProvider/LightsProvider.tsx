@@ -95,7 +95,6 @@ export default function LightsProvider(props: LightsProviderProps) {
   };
 
   const setLeds = (id: string, leds: Leds): AxiosReturn<Light> => {
-    console.log(leds);
     const ax: AxiosReturn<Light> = axios.patch(`/lights/${id}/color`, leds);
     ax.then((response: AxiosResponse<Response<Light>>) => {
       snackbarController.showResponse(response);
@@ -104,7 +103,6 @@ export default function LightsProvider(props: LightsProviderProps) {
       });
     });
     ax.catch((err: AxiosError) => {
-      console.log(err.request);
       snackbarController.showResponse(err.response);
     });
     return ax;

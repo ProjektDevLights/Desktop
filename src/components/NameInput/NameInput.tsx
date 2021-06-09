@@ -96,7 +96,6 @@ export default function NameInput(props: NameInputProps) {
           onChange={(e) => setName(e.target.value)}
           className={styles.textField}
           onKeyPress={(e) => {
-            console.log(e.key);
             if (e.key === 'Enter') {
               confirm();
             }
