@@ -1,7 +1,9 @@
 import { Grid, makeStyles, Slider } from '@material-ui/core';
 import { max } from 'lodash';
 import React from 'react';
+import LightColorPicker from '../../LightColorPicker';
 import { useLight } from '../../LightProvider';
+import TimeoutSlider from '../../TimeoutSlider';
 import PlainComponent from '../PlainComponent';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -63,30 +65,10 @@ export default function RunnerComponent(props: RunnerComponentProps) {
   return (
     <Grid className={styles.root} container spacing={2} direction="row">
       <Grid item>
-        <PlainComponent />
+        <LightColorPicker index={0} />
       </Grid>
       <Grid item>
-        <Grid container className={styles.sliderGrid}>
-          <div className={styles.sliderContainer}>
-            <Slider
-              value={speed}
-              min={0}
-              max={100}
-              marks={marks}
-              className={styles.slider}
-              orientation="vertical"
-              scale={(x) => {
-                return x * x;
-              }}
-              onChange={(e, value: number | number[]) => {
-                setSpeed(value as number);
-              }}
-              onChangeCommitted={(e, value: number | number[]) => {
-                light.setTimeout(percentageToSpeed(value as number));
-              }}
-            />
-          </div>
-        </Grid>
+        <TimeoutSlider orientation="vertical" />
       </Grid>
     </Grid>
   );

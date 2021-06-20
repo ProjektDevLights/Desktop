@@ -33,6 +33,8 @@ export default function SnackbarProvider(props: SnackbarProviderProps) {
   const [message, setMessage] = React.useState<string>('');
   const [severity, setSeverity] = React.useState<Color>('info');
 
+  const snackbarRef = React.useRef();
+
   const forceClose = () => {
     setOpen(false);
   };
@@ -96,7 +98,12 @@ export default function SnackbarProvider(props: SnackbarProviderProps) {
       }}
     >
       {props.children}
-      <Snackbar open={open} onClose={handleClose} autoHideDuration={3000}>
+      <Snackbar
+        open={open}
+        onClose={handleClose}
+        autoHideDuration={3000}
+        ref={snackbarRef}
+      >
         <Alert
           onClose={handleClose}
           severity={severity}

@@ -1,5 +1,13 @@
 import { Pattern } from '@devlights/types';
-import { makeStyles, Paper, Typography } from '@material-ui/core';
+import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  IconButton,
+  makeStyles,
+  Paper,
+  Tooltip,
+  Typography,
+} from '@material-ui/core';
 import React from 'react';
 import ColorComponentGroup from '../ColorComponentGroup';
 import { useLight } from '../LightProvider';
@@ -14,9 +22,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: 'fit-content',
     borderRadius: 16,
+    minWidth: '300px',
+    minHeight: '200px',
+    transform: 'rotate(-5deg)',
   },
-  buttonGroup: {
-    margin: theme.spacing(2),
+  icon: {
+    color: theme.palette.secondary.main,
+    margin: theme.spacing(1),
+  },
+  button: {
+    margin: theme.spacing(1),
   },
 }));
 
@@ -30,10 +45,33 @@ export default function ColorCard(props: ColorCardProps) {
   };
 
   return (
-    <Paper className={styles.root} elevation={4}>
-      <Typography variant="h4">Color</Typography>
-      <PatternPicker />
-      <ColorComponentGroup />
-    </Paper>
+    <>
+      <Paper className={styles.root} elevation={4}>
+        <Typography variant="h4">Pattern</Typography>
+        <Typography variant="h6">{light.leds.pattern}</Typography>
+        {light.isOn ? (
+          <>
+            <PatternPicker />
+            <ColorComponentGroup />
+          </>
+        ) : (
+          <>
+            <Tooltip title="Turn on" placement="right">
+              <IconButton>
+                <FontAwesomeIcon
+                  className={styles.icon}
+                  size="3x"
+                  icon={faPowerOff}
+                  onClick={light.toggleOn}
+                />
+              </IconButton>
+            </Tooltip>
+            <Typography variant="body2">
+              In order to change the light's pattern turn it on first!
+            </Typography>
+          </>
+        )}
+      </Paper>
+    </>
   );
 }

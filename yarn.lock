@@ -1084,10 +1084,10 @@
     ajv "^6.12.0"
     ajv-keywords "^3.4.1"
 
-"@devlights/types@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@devlights/types/-/types-0.0.8.tgz#fc45d3e28f5c351d5115d9bf65640e76c85e941c"
-  integrity sha512-FcTgQNBgi27GcXaKtKz7xyr6uCoDLI4r7j/aSe/ZKs1a5viDjis3TgBCts+NZDa9cJVXVPCExzRS5pR32nZahw==
+"@devlights/types@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@devlights/types/-/types-0.0.10.tgz#5e1784ccb665c08846d521cc800a5e8b39d05318"
+  integrity sha512-FqsuAlPygtK26LttvCZOJpe2y/XDn6GpIuRZta/yYLZZbfFaexEwF7XScT57LLLWEaiNbdwwRccIijcGcb5Jjw==
 
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.2"

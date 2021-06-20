@@ -53,7 +53,9 @@ const LightProvider = (props: LightProviderProps) => {
   };
   const setPattern = (pattern: UserPattern): AxiosReturn<Light> | undefined => {
     const oldLeds: Leds = lights.getWithId(id)?.leds as Leds;
-    const firstColor = oldLeds.colors[0] ?? '#1de9b6';
+    const firstColor = oldLeds.colors
+      ? oldLeds.colors[0] ?? '#1de9b6'
+      : '#1de9b6';
     let newLeds: Leds;
     switch (pattern) {
       case 'plain':
@@ -61,7 +63,7 @@ const LightProvider = (props: LightProviderProps) => {
         break;
       case 'gradient':
         newLeds = {
-          colors: [firstColor, oldLeds.colors[1] ?? firstColor],
+          colors: [firstColor, oldLeds?.colors[1] ?? firstColor],
           pattern: 'gradient',
         };
         break;
@@ -69,7 +71,14 @@ const LightProvider = (props: LightProviderProps) => {
         newLeds = {
           colors: [firstColor],
           pattern: 'runner',
-          timeout: 1000,
+          timeout: oldLeds.timeout ?? 1000,
+        };
+        break;
+      case 'rainbow':
+      case 'fading':
+        newLeds = {
+          pattern,
+          timeout: oldLeds.timeout ?? 1000,
         };
         break;
       default:
@@ -94,7 +103,6 @@ const LightProvider = (props: LightProviderProps) => {
           timeout: oldLeds.timeout,
         };
         break;
-
       default:
         return;
     }
@@ -102,12 +110,18 @@ const LightProvider = (props: LightProviderProps) => {
   };
   const setTimeout = (timeout: number): AxiosReturn<Light> | undefined => {
     const oldLeds: Leds = lights.getWithId(id)?.leds as Leds;
-    const firstColor = oldLeds.colors[0] ?? '#1de9b6';
+    const firstColor = oldLeds.colors
+      ? oldLeds.colors[0] ?? '#1de9b6'
+      : '#1de9b6';
 
     let newLeds: Leds;
     switch (oldLeds.pattern) {
       case 'runner':
         newLeds = { colors: [firstColor], pattern: 'runner', timeout };
+        break;
+      case 'fading':
+      case 'rainbow':
+        newLeds = { colors: [], pattern: oldLeds.pattern, timeout };
         break;
       case 'plain':
       case 'gradient':

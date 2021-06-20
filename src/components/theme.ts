@@ -3,6 +3,7 @@ import { createMuiTheme, Theme } from '@material-ui/core';
 declare module '@material-ui/core/styles/createMuiTheme' {
   interface Theme {
     customs: {
+      defaultColor: string;
       colorTransition: string;
       presets: {
         blend: Record<string, unknown>;
@@ -13,6 +14,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
   // allow configuration using `createMuiTheme`
   interface ThemeOptions {
     customs?: {
+      defaultColor?: string;
       colorTransition?: string;
       presets?: {
         blend?: Record<string, unknown>;
@@ -77,6 +79,7 @@ const theme = (dark: boolean) => {
       fontFamily: ['Titillium Web'].join(','),
     },
     customs: {
+      defaultColor: '#1de9b6',
       colorTransition: 'background 200ms cubic-bezier(0.87, 0, 0.13, 1) 0ms',
       presets: {
         filter: {
