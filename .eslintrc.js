@@ -7,6 +7,7 @@ module.exports = {
     'promise/always-return': 'off',
     'react/jsx-props-no-spreading': 'off',
     'no-plusplus': 'off',
+    'no-case-declarations': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

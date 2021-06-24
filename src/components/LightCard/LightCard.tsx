@@ -74,7 +74,7 @@ export default function LightCard() {
           <ContrastTypography
             variant="h5"
             className={styles.name}
-            blend={light.leds.pattern === 'runner'}
+            blend={['runner', 'custom'].includes(light.leds.pattern)}
           >
             {light.name}
           </ContrastTypography>

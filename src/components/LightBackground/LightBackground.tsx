@@ -1,6 +1,7 @@
 import { Light } from '@devlights/types';
-import { makeStyles, Theme } from '@material-ui/core';
+import { Grid, makeStyles, Theme, useTheme } from '@material-ui/core';
 import clsx from 'clsx';
+import { max, min } from 'lodash';
 import React from 'react';
 import { Tween } from 'react-gsap';
 import { useLight } from '../LightProvider';
@@ -38,9 +39,44 @@ export default function LightBackground(
   const { children, className, ...rest } = props;
   const light = useLight();
   const styles = useStyles(light);
+  const theme = useTheme();
 
   const rainbowRef = React.createRef<HTMLDivElement>();
   const duration = ((light.leds.timeout ?? 1000) / 1000) * 255 * 6;
+
+  const getFlexAmounts = (boxCounts: number[]): number[][] => {
+    const flexAmounts: number[][] = [];
+    boxCounts.forEach((amount: number, index: number) => {
+      switch (amount) {
+        case 1:
+          flexAmounts.push([12]);
+          break;
+        case 2:
+          flexAmounts.push(index === 1 ? [5, 7] : [7, 5]);
+          break;
+        case 3:
+          flexAmounts.push(index === 1 ? [3, 5, 4] : [3, 5, 4].reverse());
+          break;
+        case 4:
+          flexAmounts.push(index === 1 ? [2, 3, 4, 3] : [2, 3, 4, 3].reverse());
+          break;
+        case 5:
+          flexAmounts.push(
+            index === 1 ? [2, 3, 3, 2, 2] : [2, 3, 3, 2, 2].reverse()
+          );
+          break;
+        case 6:
+          flexAmounts.push(
+            index === 1 ? [2, 3, 2, 1, 2, 2] : [2, 3, 2, 1, 2, 2].reverse()
+          );
+          break;
+        default:
+          flexAmounts.push([12]);
+          break;
+      }
+    });
+    return flexAmounts;
+  };
 
   const colors = [
     '#ff0000',
@@ -135,6 +171,55 @@ export default function LightBackground(
         >
           {children}
         </div>
+      );
+    case 'custom':
+      const count: number = max([
+        2,
+        min([light.leds.colors?.length ?? 1, 12]),
+      ]) as number;
+      const count1: number = Math.round(count / 2);
+      const boxes = [count1, count - count1];
+      const flexAmounts = getFlexAmounts(boxes);
+      let curIndex = -1;
+      return (
+        <Grid
+          container
+          direction="column"
+          style={{ padding: 0, position: 'relative' }}
+          className={className}
+        >
+          {flexAmounts.map((amounts: number[], i: number) => (
+            <Grid
+              item
+              xs={i === 0 ? 7 : 5}
+              style={{ maxWidth: '100%' }}
+              key={'row+' + i}
+            >
+              <Grid
+                container
+                direction="row"
+                style={{ width: '100%', height: '100%' }}
+              >
+                {amounts.map((amount: number, j: number) => {
+                  curIndex++;
+                  return (
+                    <Grid
+                      item
+                      xs={amount}
+                      style={{
+                        backgroundColor:
+                          light.leds.colors[curIndex] ??
+                          theme.customs.defaultColor,
+                      }}
+                      key={i + '' + j}
+                    />
+                  );
+                })}
+              </Grid>
+            </Grid>
+          ))}
+          {children}
+        </Grid>
       );
   }
 }
