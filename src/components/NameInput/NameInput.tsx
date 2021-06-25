@@ -8,21 +8,24 @@ import {
   Typography,
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
+import clsx from 'clsx';
 import React from 'react';
 import { useLight } from '../LightProvider';
 
 export interface NameInputProps {
   value: string;
+  className?: string;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
-    minHeight: 120,
-    position: 'static',
+    height: 100,
   },
   typograhpy: {
     display: 'flex',
-    marginTop: theme.spacing(3) - 2,
+    position: 'relative',
+    top: theme.spacing(3) - 2,
+    // marginTop: theme.spacing(3) - 2,
   },
   editIcon: {
     marginLeft: theme.spacing(1),
@@ -56,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function NameInput(props: NameInputProps) {
-  const { value } = props;
+  const { value, className } = props;
   const styles = useStyles();
   const light = useLight();
   const theme: Theme = useTheme();
@@ -64,14 +67,14 @@ export default function NameInput(props: NameInputProps) {
   const [edit, setEdit] = React.useState<boolean>(false);
 
   const confirm = () => {
-    if (props.value !== name) {
+    if (value !== name) {
       light.setName(name);
     }
     setEdit(false);
   };
 
   return (
-    <div className={styles.container}>
+    <div className={clsx(styles.container, className)}>
       {edit ? (
         <TextField
           autoFocus

@@ -1,5 +1,5 @@
 import { Pattern } from '@devlights/types';
-import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { faPlug, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   IconButton,
@@ -9,23 +9,13 @@ import {
   Typography,
 } from '@material-ui/core';
 import React from 'react';
+import BasicCard from '../BasicCard';
 import ColorComponentGroup from '../ColorComponentGroup';
 import { useLight } from '../LightProvider';
 import PatternPicker from '../PatternPicker';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop: theme.spacing(3),
-    padding: theme.spacing(2),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: 'fit-content',
-    borderRadius: 16,
-    minWidth: '300px',
-    minHeight: '200px',
-    transform: 'rotate(-5deg)',
-  },
+  root: {},
   icon: {
     color: theme.palette.secondary.main,
     margin: theme.spacing(1),
@@ -33,20 +23,20 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
   },
+  iconButton: {
+    width: 100,
+    height: 100,
+  },
 }));
 
 export interface ColorCardProps {}
 export default function ColorCard(props: ColorCardProps) {
   const styles = useStyles();
   const light = useLight();
-  const [color, setColor] = React.useState<string>(light.leds.colors[0]);
-  const handlePattern = (newPattern: Pattern) => {
-    setPattern(newPattern);
-  };
 
   return (
     <>
-      <Paper className={styles.root} elevation={4}>
+      <BasicCard rotation={-5} className={styles.root}>
         <Typography variant="h4">Pattern</Typography>
         <Typography variant="h6">{light.leds.pattern}</Typography>
         {light.isOn ? (
@@ -57,12 +47,12 @@ export default function ColorCard(props: ColorCardProps) {
         ) : (
           <>
             <Tooltip title="Turn on" placement="right">
-              <IconButton>
+              <IconButton className={styles.iconButton}>
                 <FontAwesomeIcon
                   className={styles.icon}
                   size="3x"
-                  icon={faPowerOff}
-                  onClick={light.toggleOn}
+                  icon={faPlug}
+                  onClick={() => light.setPowerStatus(true)}
                 />
               </IconButton>
             </Tooltip>
@@ -71,7 +61,7 @@ export default function ColorCard(props: ColorCardProps) {
             </Typography>
           </>
         )}
-      </Paper>
+      </BasicCard>
     </>
   );
 }

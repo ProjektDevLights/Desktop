@@ -1,15 +1,17 @@
 /* eslint-disable consistent-return */
-import { Leds, Light, UserPattern } from '@devlights/types';
 import React from 'react';
+import { Leds, Light, UserPattern } from '@devlights/types';
 import { useLights } from '../LightsProvider';
 import { AxiosReturn } from '../LightsProvider/LightsProvider';
 
 export interface LightContextType extends Light {
+  setCount: (count: number) => AxiosReturn<Light>;
   setBrightness: (brightness: number) => AxiosReturn<Light>;
   setName: (name: string) => AxiosReturn<Light>;
   setPattern: (pattern: UserPattern) => AxiosReturn<Light> | undefined;
   setColors: (colors: string[]) => AxiosReturn<Light> | undefined;
   setTimeout: (timeout: number) => AxiosReturn<Light> | undefined;
+  setPowerStatus: (status: boolean) => AxiosReturn<Light>;
   toggleOn: () => AxiosReturn<Light>;
   fetch: () => void;
 }
@@ -23,6 +25,7 @@ const defaults: LightContextType = {
     pattern: 'plain',
   },
   name: 'default',
+  setCount: () => (undefined as unknown) as AxiosReturn<Light>,
   setBrightness: () => (undefined as unknown) as AxiosReturn<Light>,
   setName: () => (undefined as unknown) as AxiosReturn<Light>,
   setPattern: () => undefined,
@@ -30,6 +33,7 @@ const defaults: LightContextType = {
   setTimeout: () => undefined,
   toggleOn: () => (undefined as unknown) as AxiosReturn<Light>,
   fetch: () => undefined,
+  setPowerStatus: () => (undefined as unknown) as AxiosReturn<Light>,
 };
 export const LightContext = React.createContext<LightContextType>(defaults);
 export interface LightProviderProps {
@@ -45,8 +49,14 @@ const LightProvider = (props: LightProviderProps) => {
   const setName = (name: string): AxiosReturn<Light> => {
     return lights.setName(id, name);
   };
+  const setCount = (length: number): AxiosReturn<Light> => {
+    return lights.setCount(id, length);
+  };
   const toggleOn = (): AxiosReturn<Light> => {
     return lights.toggleOn(id);
+  };
+  const setPowerStatus = (status: boolean): AxiosReturn<Light> => {
+    return lights.setPowerStatus(id, status);
   };
   const fetch = () => {
     return lights.fetch();
@@ -135,6 +145,8 @@ const LightProvider = (props: LightProviderProps) => {
       value={{
         ...(lights.getWithId(id) as Light),
         fetch,
+        setCount,
+        setPowerStatus,
         toggleOn,
         setBrightness,
         setName,

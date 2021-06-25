@@ -11,6 +11,8 @@ export interface LightsContextType {
   lights: Light[];
   fetch: () => void;
   getWithId: (id: string) => Light | undefined;
+  setCount: (id: string, count: number) => AxiosReturn<Light>;
+  setPowerStatus: (id: string, status: boolean) => AxiosReturn<Light>;
   toggleOn: (id: string) => AxiosReturn<Light>;
   setBrightness: (id: string, brightness: number) => AxiosReturn<Light>;
   setName: (id: string, name: string) => AxiosReturn<Light>;
@@ -21,6 +23,8 @@ const defaults: LightsContextType = {
   lights: [],
   fetch: () => {},
   getWithId: () => undefined,
+  setCount: () => (undefined as unknown) as AxiosReturn<Light>,
+  setPowerStatus: () => (undefined as unknown) as AxiosReturn<Light>,
   toggleOn: () => (undefined as unknown) as AxiosReturn<Light>,
   setBrightness: () => (undefined as unknown) as AxiosReturn<Light>,
   setName: () => (undefined as unknown) as AxiosReturn<Light>,
@@ -56,6 +60,22 @@ export default function LightsProvider(props: LightsProviderProps) {
 
   const getWithId = (id: string): Light | undefined => {
     return find(lights, (light: Light) => light.id === id);
+  };
+
+  const setCount = (id: string, count: number): AxiosReturn<Light> => {
+    const ax: AxiosReturn<Light> = axios.patch(`/lights/${id}/count`, {
+      count,
+    });
+    ax.then((response: AxiosResponse<Response<Light>>) => {
+      snackbarController.showResponse(response);
+      updateLight(id, {
+        count: response.data?.object?.count ?? getWithId(id)?.count,
+      });
+    });
+    ax.catch((err: AxiosError) => {
+      snackbarController.showResponse(err.response);
+    });
+    return ax;
   };
 
   const setBrightness = (
@@ -108,19 +128,24 @@ export default function LightsProvider(props: LightsProviderProps) {
     return ax;
   };
 
-  const toggleOn = (id: string): AxiosReturn<Light> => {
-    const light: Light | undefined = getWithId(id);
+  const setPowerStatus = (id: string, status: boolean): AxiosReturn<Light> => {
     const ax: AxiosReturn<Light> = axios.patch(
-      `/lights/${id}/${light?.isOn ? 'off' : 'on'}`
+      `/lights/${id}/${status ? 'on' : 'off'}`
     );
     ax.then((response: AxiosResponse<Response<Light>>) => {
       snackbarController.showResponse(response);
+      console.log(response.data);
       updateLight(id, { isOn: response.data.object.isOn });
     });
     ax.catch((err: AxiosError) => {
       snackbarController.showResponse(err.response);
     });
     return ax;
+  };
+
+  const toggleOn = (id: string): AxiosReturn<Light> => {
+    const light: Light | undefined = getWithId(id);
+    return setPowerStatus(id, light?.isOn ?? false);
   };
 
   React.useEffect(() => {
@@ -132,6 +157,8 @@ export default function LightsProvider(props: LightsProviderProps) {
       value={{
         lights,
         fetch,
+        setCount,
+        setPowerStatus,
         toggleOn,
         getWithId,
         setBrightness,

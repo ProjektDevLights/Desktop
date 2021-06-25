@@ -51,6 +51,10 @@ const theme = (dark: boolean) => {
                 : `linear-gradient(180deg, rgb(255,172,51), rgb(178,106,0))`,
               borderRadius: 10,
             },
+            '&::-webkit-outer-spin-button,::-webkit-inner-spin-button': {
+              '-webkit-appearance': 'none',
+              margin: 0,
+            },
           },
         },
       },

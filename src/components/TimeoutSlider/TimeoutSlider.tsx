@@ -40,20 +40,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   sliderVertical: {
     marginBottom: theme.spacing(3),
   },
-  input: {
-    '&::-webkit-outer-spin-button,::-webkit-inner-spin-button': {
-      '-webkit-appearance': 'none',
-      margin: 0,
-    },
-  },
 }));
 export default function TimeoutSlider(props: TimeoutSliderProps) {
   const { orientation, rootStyles, title, ...rest } = props;
   const light = useLight();
-  console.log(light.leds.timeout ?? 1000);
   const styles = useStyles(props);
-  console.log(light.leds.timeout ?? 1000);
-  const [timeout, setTimeout] = React.useState<number>(
+  const [timeout, setTimeoutValue] = React.useState<number>(
     light.leds.timeout ?? 1000
   );
   const [validTimeout, setValidTimeout] = React.useState<number>(timeout);
@@ -63,10 +55,10 @@ export default function TimeoutSlider(props: TimeoutSliderProps) {
       .setTimeout(tm)
       ?.then(() => {
         setValidTimeout(tm);
-        setTimeout(tm);
+        setTimeoutValue(tm);
       })
       .catch(() => {
-        setTimeout(validTimeout);
+        setTimeoutValue(validTimeout);
       });
   };
 
@@ -117,7 +109,6 @@ export default function TimeoutSlider(props: TimeoutSliderProps) {
       </div>
       <TextField
         InputProps={{
-          className: styles.input,
           startAdornment: (
             <InputAdornment position="start">
               <FontAwesomeIcon icon={faStopwatch} />
@@ -125,7 +116,7 @@ export default function TimeoutSlider(props: TimeoutSliderProps) {
           ),
         }}
         type="number"
-        onChange={(e) => commitTimeout(parseInt(e.target.value))}
+        onChange={(e) => commitTimeout(parseInt(e.target.value, 10))}
         value={timeout}
       />
     </div>
