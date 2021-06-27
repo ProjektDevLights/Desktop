@@ -1,7 +1,7 @@
 import { Leds, Light } from '@devlights/types';
 import Response from '@devlights/types/src/Response';
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { find, findIndex, merge } from 'lodash';
+import { assign, find, findIndex, merge } from 'lodash';
 import React from 'react';
 import { SnackbarContextType } from '../SnackbarProvider/SnackbarProvider';
 import useSnackbar from '../SnackbarProvider/useSnackbar';
@@ -17,6 +17,9 @@ export interface LightsContextType {
   setBrightness: (id: string, brightness: number) => AxiosReturn<Light>;
   setName: (id: string, name: string) => AxiosReturn<Light>;
   setLeds: (id: string, leds: Leds) => AxiosReturn<Light>;
+  addTag: (id: string, tag: string) => AxiosReturn<Light>;
+  removeTag: (id: string, tag: string) => AxiosReturn<Light>;
+  setPosition: (id: string, pos: number) => AxiosReturn<Light>;
 }
 
 const defaults: LightsContextType = {
@@ -29,6 +32,9 @@ const defaults: LightsContextType = {
   setBrightness: () => (undefined as unknown) as AxiosReturn<Light>,
   setName: () => (undefined as unknown) as AxiosReturn<Light>,
   setLeds: () => (undefined as unknown) as AxiosReturn<Light>,
+  addTag: () => (undefined as unknown) as AxiosReturn<Light>,
+  removeTag: () => (undefined as unknown) as AxiosReturn<Light>,
+  setPosition: () => (undefined as unknown) as AxiosReturn<Light>,
 };
 
 export interface LightsProviderProps {
@@ -49,7 +55,7 @@ export default function LightsProvider(props: LightsProviderProps) {
       lightsCopy,
       (light: Light) => light.id === id
     );
-    lightsCopy[lightIndex] = merge(lightsCopy[lightIndex], data);
+    lightsCopy[lightIndex] = assign(lightsCopy[lightIndex], data);
     setLights(lightsCopy);
   };
   const fetch = () => {
@@ -134,7 +140,6 @@ export default function LightsProvider(props: LightsProviderProps) {
     );
     ax.then((response: AxiosResponse<Response<Light>>) => {
       snackbarController.showResponse(response);
-      console.log(response.data);
       updateLight(id, { isOn: response.data.object.isOn });
     });
     ax.catch((err: AxiosError) => {
@@ -146,6 +151,48 @@ export default function LightsProvider(props: LightsProviderProps) {
   const toggleOn = (id: string): AxiosReturn<Light> => {
     const light: Light | undefined = getWithId(id);
     return setPowerStatus(id, light?.isOn ?? false);
+  };
+
+  const addTag = (id: string, tag: string): AxiosReturn<Light> => {
+    const ax: AxiosReturn<Light> = axios.put(`/lights/${id}/tags`, {
+      tags: [tag],
+    });
+    ax.then((response: AxiosResponse<Response<Light>>) => {
+      snackbarController.showResponse(response);
+      updateLight(id, { tags: response.data.object.tags });
+    });
+    ax.catch((err: AxiosError) => {
+      snackbarController.showResponse(err.response);
+    });
+    return ax;
+  };
+
+  const removeTag = (id: string, tag: string): AxiosReturn<Light> => {
+    const ax: AxiosReturn<Light> = axios.delete(`/lights/${id}/tags`, {
+      data: { tags: [tag] },
+    });
+    ax.then((response: AxiosResponse<Response<Light>>) => {
+      snackbarController.showResponse(response);
+      updateLight(id, { tags: response.data.object.tags });
+    });
+    ax.catch((err: AxiosError) => {
+      snackbarController.showResponse(err.response);
+    });
+    return ax;
+  };
+
+  const setPosition = (id: string, pos: number): AxiosReturn<Light> => {
+    const ax: AxiosReturn<Light> = axios.patch(`/lights/${id}/position`, {
+      position: pos,
+    });
+    ax.then((response: AxiosResponse<Response<Light>>) => {
+      snackbarController.showResponse(response);
+      updateLight(id, { position: response.data.object.position });
+    });
+    ax.catch((err: AxiosError) => {
+      snackbarController.showResponse(err.response);
+    });
+    return ax;
   };
 
   React.useEffect(() => {
@@ -164,6 +211,9 @@ export default function LightsProvider(props: LightsProviderProps) {
         setBrightness,
         setName,
         setLeds,
+        addTag,
+        removeTag,
+        setPosition,
       }}
     >
       {children}

@@ -6,6 +6,7 @@ import ColorCard from '../ColorCard';
 import { useLight } from '../LightProvider';
 import NameInput from '../NameInput';
 import SettingsCard from '../SettingsCard';
+import TagsCard from '../TagsCard';
 
 const useStyles = makeStyles((theme: Theme) => ({
   name: {
@@ -24,6 +25,9 @@ const LightScreen = () => {
         </Grid>
         <Grid item>
           <SettingsCard />
+        </Grid>
+        <Grid item>
+          <TagsCard />
         </Grid>
       </Grid>
     </>

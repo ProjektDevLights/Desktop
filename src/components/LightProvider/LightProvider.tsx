@@ -3,8 +3,11 @@ import React from 'react';
 import { Leds, Light, UserPattern } from '@devlights/types';
 import { useLights } from '../LightsProvider';
 import { AxiosReturn } from '../LightsProvider/LightsProvider';
+import { light } from '@material-ui/core/styles/createPalette';
+import { map, max } from 'lodash';
 
 export interface LightContextType extends Light {
+  fetch: () => void;
   setCount: (count: number) => AxiosReturn<Light>;
   setBrightness: (brightness: number) => AxiosReturn<Light>;
   setName: (name: string) => AxiosReturn<Light>;
@@ -13,7 +16,13 @@ export interface LightContextType extends Light {
   setTimeout: (timeout: number) => AxiosReturn<Light> | undefined;
   setPowerStatus: (status: boolean) => AxiosReturn<Light>;
   toggleOn: () => AxiosReturn<Light>;
-  fetch: () => void;
+  addTag: (tag: string) => AxiosReturn<Light>;
+  removeTag: (tag: string) => AxiosReturn<Light>;
+  setPosition: (pos: number) => AxiosReturn<Light>;
+  moveToTop: () => AxiosReturn<Light>;
+  moveToBottom: () => AxiosReturn<Light>;
+  moveUp: () => AxiosReturn<Light>;
+  moveDown: () => AxiosReturn<Light>;
 }
 const defaults: LightContextType = {
   brightness: 255,
@@ -25,6 +34,8 @@ const defaults: LightContextType = {
     pattern: 'plain',
   },
   name: 'default',
+  position: 0,
+  fetch: () => undefined,
   setCount: () => (undefined as unknown) as AxiosReturn<Light>,
   setBrightness: () => (undefined as unknown) as AxiosReturn<Light>,
   setName: () => (undefined as unknown) as AxiosReturn<Light>,
@@ -32,8 +43,14 @@ const defaults: LightContextType = {
   setColors: () => undefined,
   setTimeout: () => undefined,
   toggleOn: () => (undefined as unknown) as AxiosReturn<Light>,
-  fetch: () => undefined,
   setPowerStatus: () => (undefined as unknown) as AxiosReturn<Light>,
+  addTag: () => (undefined as unknown) as AxiosReturn<Light>,
+  removeTag: () => (undefined as unknown) as AxiosReturn<Light>,
+  setPosition: () => (undefined as unknown) as AxiosReturn<Light>,
+  moveDown: () => (undefined as unknown) as AxiosReturn<Light>,
+  moveToBottom: () => (undefined as unknown) as AxiosReturn<Light>,
+  moveToTop: () => (undefined as unknown) as AxiosReturn<Light>,
+  moveUp: () => (undefined as unknown) as AxiosReturn<Light>,
 };
 export const LightContext = React.createContext<LightContextType>(defaults);
 export interface LightProviderProps {
@@ -140,6 +157,35 @@ const LightProvider = (props: LightProviderProps) => {
     }
     return lights.setLeds(id, newLeds);
   };
+
+  const addTag = (tag: string): AxiosReturn<Light> => {
+    return lights.addTag(id, tag);
+  };
+
+  const removeTag = (tag: string): AxiosReturn<Light> => {
+    return lights.removeTag(id, tag);
+  };
+
+  const setPosition = (pos: number): AxiosReturn<Light> => {
+    return lights.setPosition(id, pos);
+  };
+
+  const moveToBottom = (): AxiosReturn<Light> => {
+    return setPosition(max(map(lights.lights, 'position')) + 1 ?? 1000);
+  };
+
+  const moveToTop = (): AxiosReturn<Light> => {
+    return setPosition(0);
+  };
+
+  const moveDown = (): AxiosReturn<Light> => {
+    console.log(lights.getWithId(id)?.position + 1);
+    return setPosition(lights.getWithId(id)?.position + 1 ?? 0);
+  };
+
+  const moveUp = (): AxiosReturn<Light> => {
+    return setPosition(lights.getWithId(id)?.position - 1 ?? 0);
+  };
   return (
     <LightContext.Provider
       value={{
@@ -153,6 +199,13 @@ const LightProvider = (props: LightProviderProps) => {
         setPattern,
         setColors,
         setTimeout,
+        addTag,
+        removeTag,
+        setPosition,
+        moveDown,
+        moveToBottom,
+        moveToTop,
+        moveUp,
       }}
     >
       {children}

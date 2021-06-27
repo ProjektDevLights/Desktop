@@ -103,6 +103,12 @@ export default function NameInput(props: NameInputProps) {
               confirm();
             }
           }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              setName(light.name);
+              setEdit(false);
+            }
+          }}
         />
       ) : (
         <Typography className={styles.typograhpy} variant="h2">

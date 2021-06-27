@@ -15,7 +15,7 @@ function Home() {
   const { lights } = useLights();
   return (
     <Grid className={styles.container} container spacing={2}>
-      <Grid item container spacing={4} sm={12} lg={7}>
+      <Grid item container spacing={4} sm={12} lg={12}>
         {lights.map((light: Light) => {
           return (
             <Grid item key={light.id}>

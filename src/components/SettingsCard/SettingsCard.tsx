@@ -18,12 +18,20 @@ import { makeStyles } from '@material-ui/styles';
 import React from 'react';
 import BasicCard from '../BasicCard';
 import { useLight } from '../LightProvider';
-import { LengthItem, PowerItem } from '../SettingsItems';
+import { LengthItem, PositionItem, PowerItem } from '../SettingsItems';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  root: {},
+  root: {
+    minHeight: 'none',
+    width: 400,
+  },
   list: {
     width: '100%',
+  },
+  typographyContainer: {
+    display: 'flex',
+    flex: 'auto',
+    alignItems: 'center',
   },
 }));
 function SettingsCard() {
@@ -35,9 +43,20 @@ function SettingsCard() {
       <Typography variant="h4">Settings</Typography>
       <List className={styles.list}>
         <PowerItem />
-        <LengthItem />
-        <ListItem>3</ListItem>
+        <PositionItem />
+        {light.isOn && (
+          <>
+            <LengthItem />
+          </>
+        )}
       </List>
+      {!light.isOn && (
+        <div className={styles.typographyContainer}>
+          <Typography variant="body2">
+            In order to change the light's settings turn it on first!
+          </Typography>
+        </div>
+      )}
     </BasicCard>
   );
 }
