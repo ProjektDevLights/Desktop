@@ -1,10 +1,9 @@
 /* eslint-disable consistent-return */
+import { Alarm, Leds, Light, UserPattern } from '@devlights/types';
+import { map, max } from 'lodash';
 import React from 'react';
-import { Leds, Light, UserPattern } from '@devlights/types';
 import { useLights } from '../LightsProvider';
 import { AxiosReturn } from '../LightsProvider/LightsProvider';
-import { light } from '@material-ui/core/styles/createPalette';
-import { map, max } from 'lodash';
 
 export interface LightContextType extends Light {
   fetch: () => void;
@@ -23,6 +22,7 @@ export interface LightContextType extends Light {
   moveToBottom: () => AxiosReturn<Light>;
   moveUp: () => AxiosReturn<Light>;
   moveDown: () => AxiosReturn<Light>;
+  getAlarms: () => Promise<Alarm[]>;
 }
 const defaults: LightContextType = {
   brightness: 255,
@@ -51,6 +51,7 @@ const defaults: LightContextType = {
   moveToBottom: () => (undefined as unknown) as AxiosReturn<Light>,
   moveToTop: () => (undefined as unknown) as AxiosReturn<Light>,
   moveUp: () => (undefined as unknown) as AxiosReturn<Light>,
+  getAlarms: async () => [],
 };
 export const LightContext = React.createContext<LightContextType>(defaults);
 export interface LightProviderProps {
@@ -179,13 +180,17 @@ const LightProvider = (props: LightProviderProps) => {
   };
 
   const moveDown = (): AxiosReturn<Light> => {
-    console.log(lights.getWithId(id)?.position + 1);
     return setPosition(lights.getWithId(id)?.position + 1 ?? 0);
   };
 
   const moveUp = (): AxiosReturn<Light> => {
     return setPosition(lights.getWithId(id)?.position - 1 ?? 0);
   };
+
+  const getAlarms = (): Promise<Alarm[]> => {
+    return lights.getAlarms(id);
+  };
+
   return (
     <LightContext.Provider
       value={{
@@ -206,6 +211,7 @@ const LightProvider = (props: LightProviderProps) => {
         moveToBottom,
         moveToTop,
         moveUp,
+        getAlarms,
       }}
     >
       {children}

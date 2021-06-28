@@ -1,7 +1,7 @@
-import { Leds, Light } from '@devlights/types';
+import { Alarm, Leds, Light } from '@devlights/types';
 import Response from '@devlights/types/src/Response';
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { assign, find, findIndex, merge } from 'lodash';
+import { assign, find, findIndex } from 'lodash';
 import React from 'react';
 import { SnackbarContextType } from '../SnackbarProvider/SnackbarProvider';
 import useSnackbar from '../SnackbarProvider/useSnackbar';
@@ -20,6 +20,7 @@ export interface LightsContextType {
   addTag: (id: string, tag: string) => AxiosReturn<Light>;
   removeTag: (id: string, tag: string) => AxiosReturn<Light>;
   setPosition: (id: string, pos: number) => AxiosReturn<Light>;
+  getAlarms: (id: string) => Promise<Alarm[]>;
 }
 
 const defaults: LightsContextType = {
@@ -35,6 +36,7 @@ const defaults: LightsContextType = {
   addTag: () => (undefined as unknown) as AxiosReturn<Light>,
   removeTag: () => (undefined as unknown) as AxiosReturn<Light>,
   setPosition: () => (undefined as unknown) as AxiosReturn<Light>,
+  getAlarms: () => (undefined as unknown) as Promise<Alarm[]>,
 };
 
 export interface LightsProviderProps {
@@ -195,6 +197,13 @@ export default function LightsProvider(props: LightsProviderProps) {
     return ax;
   };
 
+  const getAlarms = async (id: string): Promise<Alarm[]> => {
+    const ax: AxiosReturn<Alarm[]> = axios.get(`/lights/${id}/alarms`);
+    ax.catch((err: AxiosError) => {
+      snackbarController.showResponse(err.response);
+    });
+    return (await ax).data.object;
+  };
   React.useEffect(() => {
     fetch();
   }, []);
@@ -214,6 +223,7 @@ export default function LightsProvider(props: LightsProviderProps) {
         addTag,
         removeTag,
         setPosition,
+        getAlarms,
       }}
     >
       {children}

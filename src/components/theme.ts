@@ -58,6 +58,11 @@ const theme = (dark: boolean) => {
           },
         },
       },
+      MuiList: {
+        root: {
+          width: '100%',
+        },
+      },
     },
     props: {
       MuiTypography: {

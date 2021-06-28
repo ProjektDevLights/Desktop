@@ -2,6 +2,8 @@ import { Light } from '@devlights/types';
 import { Grid, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import React from 'react';
+import AlarmCard from '../AlarmCard';
+import AmbientCard from '../AmbientCard';
 import ColorCard from '../ColorCard';
 import { useLight } from '../LightProvider';
 import NameInput from '../NameInput';
@@ -28,6 +30,12 @@ const LightScreen = () => {
         </Grid>
         <Grid item>
           <TagsCard />
+        </Grid>
+        <Grid item>
+          <AlarmCard />
+        </Grid>
+        <Grid item>
+          <AmbientCard />
         </Grid>
       </Grid>
     </>
