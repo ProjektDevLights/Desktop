@@ -8,17 +8,18 @@ export interface DisplayProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    width: (bounds: Bounds) => bounds.width / 8,
-    height: (bounds: Bounds) => bounds.height / 8,
+    width: (bounds: Bounds) => bounds.width,
+    height: (bounds: Bounds) => bounds.height,
     backgroundColor: theme.palette.info.light,
     display: 'flex',
-    position: 'relative',
-    top: (bounds: Bounds) => bounds.y / 8,
-    left: (bounds: Bounds) => bounds.x / 8,
+    position: 'absolute',
+    top: (bounds: Bounds) => bounds.y,
+    left: (bounds: Bounds) => bounds.x,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
     cursor: 'pointer',
+    transition: 'all .3s ease-in-out 0s',
   },
   id: {
     fontWeight: 'bold',

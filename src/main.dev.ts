@@ -118,6 +118,14 @@ const createWindow = async () => {
     }
   });
 
+  const sendDisplays = () => {
+    mainWindow?.webContents.send('displays-changed', screen.getAllDisplays());
+  };
+
+  screen.on('display-added', sendDisplays);
+  screen.on('display-metrics-changed', sendDisplays);
+  screen.on('display-removed', sendDisplays);
+
   ipcMain.handle('get-screens', () => {
     return screen.getAllDisplays();
   });
