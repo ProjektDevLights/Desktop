@@ -21,9 +21,9 @@ export default function LightColorPicker(props: LightColorPickerProps) {
       : theme.customs.defaultColor
   );
 
-  const handleComplete = (newColor: ColorResult) => {
+  const handleComplete = (newColor: string) => {
     const oldColors = light.leds.colors ? [...light.leds.colors] : [];
-    oldColors[index] = newColor.hex;
+    oldColors[index] = newColor;
     light.setColors(oldColors);
   };
   return (
@@ -34,9 +34,9 @@ export default function LightColorPicker(props: LightColorPickerProps) {
         onChange={(newColor: ColorResult) => setColor(newColor.hex)}
         onTextChange={(t: string) => {
           setColor(t);
-          light.setColors([tinycolor(t).toHex()]);
+          handleComplete(tinycolor(t).toHex());
         }}
-        onChangeComplete={handleComplete}
+        onChangeComplete={(res: ColorResult) => handleComplete(res.hex)}
       />
     </>
   );

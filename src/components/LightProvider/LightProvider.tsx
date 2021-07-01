@@ -1,5 +1,6 @@
 /* eslint-disable consistent-return */
 import { Alarm, Leds, Light, UserPattern } from '@devlights/types';
+import { useTheme } from '@material-ui/core';
 import { map, max } from 'lodash';
 import React from 'react';
 import { useLights } from '../LightsProvider';
@@ -61,6 +62,7 @@ export interface LightProviderProps {
 const LightProvider = (props: LightProviderProps) => {
   const { id, children } = props;
   const lights = useLights();
+  const theme = useTheme();
   const setBrightness = (brightness: number): AxiosReturn<Light> => {
     return lights.setBrightness(id, brightness);
   };
@@ -122,7 +124,10 @@ const LightProvider = (props: LightProviderProps) => {
         newLeds = { colors: [colors[0]], pattern: 'plain' };
         break;
       case 'gradient':
-        newLeds = { colors: [colors[0], colors[1]], pattern: 'gradient' };
+        newLeds = {
+          colors: [colors[0], colors[1] ?? theme.customs.defaultColor],
+          pattern: 'gradient',
+        };
         break;
       case 'runner':
         newLeds = {

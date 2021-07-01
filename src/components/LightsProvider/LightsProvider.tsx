@@ -3,6 +3,7 @@ import Response from '@devlights/types/src/Response';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { assign, find, findIndex } from 'lodash';
 import React from 'react';
+import RefreshButton from '../RefreshButton';
 import { SnackbarContextType } from '../SnackbarProvider/SnackbarProvider';
 import useSnackbar from '../SnackbarProvider/useSnackbar';
 
@@ -19,7 +20,7 @@ export interface LightsContextType {
   setLeds: (id: string, leds: Leds) => AxiosReturn<Light>;
   addTag: (id: string, tag: string) => AxiosReturn<Light>;
   removeTag: (id: string, tag: string) => AxiosReturn<Light>;
-  setPosition: (id: string, pos: number) => AxiosReturn<Light>;
+  setPosition: (id: string, pos: number) => AxiosReturn<Light[]>;
   getAlarms: (id: string) => Promise<Alarm[]>;
 }
 
@@ -35,7 +36,7 @@ const defaults: LightsContextType = {
   setLeds: () => (undefined as unknown) as AxiosReturn<Light>,
   addTag: () => (undefined as unknown) as AxiosReturn<Light>,
   removeTag: () => (undefined as unknown) as AxiosReturn<Light>,
-  setPosition: () => (undefined as unknown) as AxiosReturn<Light>,
+  setPosition: () => (undefined as unknown) as AxiosReturn<Light[]>,
   getAlarms: () => (undefined as unknown) as Promise<Alarm[]>,
 };
 
@@ -152,7 +153,7 @@ export default function LightsProvider(props: LightsProviderProps) {
 
   const toggleOn = (id: string): AxiosReturn<Light> => {
     const light: Light | undefined = getWithId(id);
-    return setPowerStatus(id, light?.isOn ?? false);
+    return setPowerStatus(id, !light?.isOn ?? false);
   };
 
   const addTag = (id: string, tag: string): AxiosReturn<Light> => {
@@ -183,13 +184,13 @@ export default function LightsProvider(props: LightsProviderProps) {
     return ax;
   };
 
-  const setPosition = (id: string, pos: number): AxiosReturn<Light> => {
-    const ax: AxiosReturn<Light> = axios.patch(`/lights/${id}/position`, {
+  const setPosition = (id: string, pos: number): AxiosReturn<Light[]> => {
+    const ax: AxiosReturn<Light[]> = axios.patch(`/lights/${id}/position`, {
       position: pos,
     });
-    ax.then((response: AxiosResponse<Response<Light>>) => {
+    ax.then((response: AxiosResponse<Response<Light[]>>) => {
       snackbarController.showResponse(response);
-      updateLight(id, { position: response.data.object.position });
+      setLights(response.data.object);
     });
     ax.catch((err: AxiosError) => {
       snackbarController.showResponse(err.response);
@@ -227,6 +228,7 @@ export default function LightsProvider(props: LightsProviderProps) {
       }}
     >
       {children}
+      <RefreshButton />
     </LightsContext.Provider>
   );
 }

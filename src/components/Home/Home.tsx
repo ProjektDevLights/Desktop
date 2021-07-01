@@ -1,5 +1,6 @@
 import { Light } from '@devlights/types';
 import { Grid, makeStyles } from '@material-ui/core';
+import { sortBy } from 'lodash';
 import React from 'react';
 import LightCard from '../LightCard';
 import { LightProvider } from '../LightProvider';
@@ -12,7 +13,13 @@ const useStyles = makeStyles(() => ({
 }));
 function Home() {
   const styles = useStyles();
-  const { lights } = useLights();
+  let { lights, fetch } = useLights();
+  lights = sortBy(lights, 'position', 'asc');
+  React.useEffect(() => {
+    document.addEventListener('keypress', (e: KeyboardEvent) => {
+      if ((e.key === 'r' || e.key === 'R') && e.ctrlKey) fetch();
+    });
+  }, []);
   return (
     <Grid className={styles.container} container spacing={2}>
       <Grid item container spacing={4} sm={12} lg={12}>
