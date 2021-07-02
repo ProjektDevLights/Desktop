@@ -17,7 +17,7 @@ export interface SnackbarProviderProps {
 }
 export interface SnackbarContextType {
   forceClose: () => void;
-  show: (message: string) => void;
+  show: (message: string, sev?: Color) => void;
   showResponse: (res?: AxiosResponse) => void;
 }
 const defaults: SnackbarContextType = {
@@ -38,9 +38,9 @@ export default function SnackbarProvider(props: SnackbarProviderProps) {
   const forceClose = () => {
     setOpen(false);
   };
-  const show = (msg: string) => {
+  const show = (msg: string, sev?: Color) => {
     setMessage(msg);
-    setSeverity('info');
+    setSeverity(sev ?? 'info');
     setOpen(true);
   };
 

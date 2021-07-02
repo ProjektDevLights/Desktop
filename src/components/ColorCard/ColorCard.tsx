@@ -1,16 +1,8 @@
-import { Pattern } from '@devlights/types';
-import { faPlug, faPowerOff } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  IconButton,
-  makeStyles,
-  Paper,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
 import BasicCard from '../BasicCard';
 import ColorComponentGroup from '../ColorComponentGroup';
+import LightOff from '../LightOff';
 import { useLight } from '../LightProvider';
 import PatternPicker from '../PatternPicker';
 
@@ -45,21 +37,7 @@ export default function ColorCard(props: ColorCardProps) {
             <ColorComponentGroup />
           </>
         ) : (
-          <>
-            <Tooltip title="Turn on" placement="right">
-              <IconButton className={styles.iconButton}>
-                <FontAwesomeIcon
-                  className={styles.icon}
-                  size="3x"
-                  icon={faPlug}
-                  onClick={() => light.setPowerStatus(true)}
-                />
-              </IconButton>
-            </Tooltip>
-            <Typography variant="body2">
-              In order to change the light's pattern turn it on first!
-            </Typography>
-          </>
+          <LightOff />
         )}
       </BasicCard>
     </>

@@ -275,6 +275,7 @@
     "gsap": "^3.6.1",
     "history": "^5.0.0",
     "lodash": "^4.17.21",
+    "python-shell": "^3.0.0",
     "react": "^17.0.1",
     "react-beautiful-dnd": "^13.1.0",
     "react-color": "^2.19.3",
