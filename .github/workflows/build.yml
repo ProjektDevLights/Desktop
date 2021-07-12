@@ -18,10 +18,11 @@ jobs:
       - name: Package linux
         run: yarn package -l
       - name: Upload linux build
-        uses: actions/upload-artifact@v1
+        uses: JantHsueh/upload-file-action@master
         with:
-          name: DevLightsDesktop-linux.deb
-          path: release/
+          url: 'http://baed4ff.online-server.cloud:8081/bot${{secrets.bot_key}}/sendDocument'
+          forms: '{"chat_id": -1001554516812}'
+          fileForms: '{"document": "release/DevLightsDesktop-linux.deb"}'
   build-windows:
     runs-on: windows-latest
     steps:
