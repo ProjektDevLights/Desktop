@@ -3,7 +3,7 @@ name: build
 on:
   push:
     branches:
-      - master
+      - master,development
 jobs:
   build-linux:
     runs-on: ubuntu-latest
