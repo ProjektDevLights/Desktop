@@ -41,4 +41,4 @@ jobs:
         with:
           url: 'http://baed4ff.online-server.cloud:8081/bot${{secrets.bot_key}}/sendDocument'
           forms: '{"chat_id": ${{secrets.chat_id}}, "caption": "A new DevLightsDesktop windows build is ready. Try it out now!"}'
-          fileForms: '{"document": "release/DevLightsDesktop-windows.exe"}'
+          fileForms: '{"document": "release/DevLightsDesktop-win.exe"}'
