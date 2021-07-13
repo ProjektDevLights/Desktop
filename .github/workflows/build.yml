@@ -22,7 +22,7 @@ jobs:
         uses: JantHsueh/upload-file-action@master
         with:
           url: 'http://baed4ff.online-server.cloud:8081/bot${{secrets.bot_key}}/sendDocument'
-          forms: '{"chat_id": ${{secrets.chat_id}}, "caption": "A new DevLightsDesktop linux build is ready. Try it out now!"}'
+          forms: '{"chat_id": "${{secrets.chat_id}}", "caption": "A new DevLightsDesktop linux build is ready. Try it out now!"}'
           fileForms: '{"document": "release/DevLightsDesktop-linux.deb"}'
   build-windows:
     runs-on: windows-latest
@@ -40,5 +40,5 @@ jobs:
         uses: JantHsueh/upload-file-action@master
         with:
           url: 'http://baed4ff.online-server.cloud:8081/bot${{secrets.bot_key}}/sendDocument'
-          forms: '{"chat_id": ${{secrets.chat_id}}, "caption": "A new DevLightsDesktop windows build is ready. Try it out now!"}'
+          forms: '{"chat_id": "${{secrets.chat_id}}", "caption": "A new DevLightsDesktop windows build is ready. Try it out now!"}'
           fileForms: '{"document": "release/DevLightsDesktop-win.exe"}'
