@@ -165,7 +165,7 @@ export default function AmbientCard(props: AmbientCardProps) {
   };
 
   return (
-    <BasicCard rotation={-1}>
+    <BasicCard>
       <Typography variant="h4">AmbiLight</Typography>
       <Typography variant="body1" className={styles.desc}>
         Start an ambilight on this light

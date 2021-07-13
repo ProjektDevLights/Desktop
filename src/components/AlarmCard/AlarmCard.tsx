@@ -37,7 +37,7 @@ export default function AlarmCard(props: AlarmCardProps) {
     light.getAlarms().then(setAlarms);
   }, []);
   return (
-    <BasicCard rotation={3}>
+    <BasicCard>
       <Typography variant="h4">Alarms</Typography>
       <Typography variant="body1" className={styles.desc}>
         Alarms running on this light

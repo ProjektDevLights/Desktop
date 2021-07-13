@@ -28,7 +28,7 @@ export default function ColorCard(props: ColorCardProps) {
 
   return (
     <>
-      <BasicCard rotation={-5} className={styles.root}>
+      <BasicCard className={styles.root}>
         <Typography variant="h4">Pattern</Typography>
         <Typography variant="h6">{light.leds.pattern}</Typography>
         {light.isOn ? (

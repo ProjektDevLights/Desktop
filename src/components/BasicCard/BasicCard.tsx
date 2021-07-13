@@ -1,4 +1,4 @@
-import { Card, Paper, Theme } from '@material-ui/core';
+import { Paper, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import React from 'react';
@@ -6,7 +6,6 @@ import React from 'react';
 export interface BasicCardProps {
   children?: React.ReactNode;
   className?: string;
-  rotation?: number;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -19,13 +18,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: 16,
     minWidth: '300px',
     minHeight: '200px',
-    transform: (r) => `rotate(${r ?? 0}deg)`,
   },
 }));
 export default function BasicCard(props: BasicCardProps) {
-  const { children, className, rotation } = props;
+  const { children, className } = props;
 
-  const styles = useStyles(rotation);
+  const styles = useStyles();
   return (
     <Paper className={clsx(styles.root, className)} elevation={4}>
       {children}

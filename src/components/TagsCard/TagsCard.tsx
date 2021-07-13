@@ -1,9 +1,4 @@
-import {
-  faCertificate,
-  faCheck,
-  faPlus,
-  faTags,
-} from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTags } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   IconButton,
@@ -51,7 +46,7 @@ export default function TagsCard() {
     setValue('');
   };
   return (
-    <BasicCard rotation={-2}>
+    <BasicCard>
       <Typography variant="h4">Tags</Typography>
       <Typography variant="body1" className={styles.description}>
         Add and remove tags
