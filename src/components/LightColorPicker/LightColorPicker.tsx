@@ -14,6 +14,7 @@ export interface LightColorPickerProps {
 export default function LightColorPicker(props: LightColorPickerProps) {
   const { index, title } = props;
   const light = useLight();
+
   const theme: Theme = useTheme();
   const [color, setColor] = React.useState<string>(
     light.leds.colors
@@ -26,6 +27,15 @@ export default function LightColorPicker(props: LightColorPickerProps) {
     oldColors[index] = newColor;
     light.setColors(oldColors);
   };
+
+  React.useEffect(() => {
+    if (
+      light.leds.colors &&
+      light.leds.colors[index] !== tinycolor(color).toHex()
+    ) {
+      setColor(light.leds.colors[index]);
+    }
+  }, [light]);
   return (
     <>
       {title && <Typography align="center">{title}</Typography>}

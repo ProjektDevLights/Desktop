@@ -3,6 +3,8 @@ import Response from '@devlights/types/src/Response';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { assign, find, findIndex } from 'lodash';
 import React from 'react';
+import { io, Socket } from 'socket.io-client';
+import config from '../../config.json';
 import RefreshButton from '../RefreshButton';
 import { SnackbarContextType } from '../SnackbarProvider/SnackbarProvider';
 import useSnackbar from '../SnackbarProvider/useSnackbar';
@@ -49,6 +51,8 @@ export default function LightsProvider(props: LightsProviderProps) {
   const { children } = props;
 
   const [lights, setLights] = React.useState<Light[]>([]);
+  const [listenActive, setListenActive] = React.useState<boolean>(false);
+  const [socket, setSocket] = React.useState<Socket>();
 
   const snackbarController: SnackbarContextType = useSnackbar();
 
@@ -61,6 +65,15 @@ export default function LightsProvider(props: LightsProviderProps) {
     lightsCopy[lightIndex] = assign(lightsCopy[lightIndex], data);
     setLights(lightsCopy);
   };
+
+  const listen = () => {
+    const s = io(config.baseUrl);
+    s.on('light_change', (light: Light) => {
+      updateLight(light.id, light);
+    });
+    setSocket(s);
+  };
+
   const fetch = () => {
     axios.get(`/lights`).then((response: AxiosResponse<Response<Light[]>>) => {
       setLights(response.data.object);
@@ -148,7 +161,7 @@ export default function LightsProvider(props: LightsProviderProps) {
     ax.catch((err: AxiosError) => {
       snackbarController.showResponse(err.response);
     });
-    return ax;
+    return (undefined as unknown) as AxiosReturn<Light>;
   };
 
   const toggleOn = (id: string): AxiosReturn<Light> => {
@@ -209,6 +222,12 @@ export default function LightsProvider(props: LightsProviderProps) {
     fetch();
   }, []);
 
+  React.useEffect(() => {
+    if (lights.length && !listenActive) {
+      listen();
+      setListenActive(true);
+    }
+  }, [lights]);
   return (
     <LightsContext.Provider
       value={{

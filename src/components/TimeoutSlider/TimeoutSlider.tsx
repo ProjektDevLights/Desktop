@@ -1,14 +1,13 @@
 import { faStopwatch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  Box,
+  InputAdornment,
   makeStyles,
   Slider,
+  SliderProps,
   TextField,
   Theme,
-  InputAdornment,
   Typography,
-  SliderProps,
 } from '@material-ui/core';
 import clsx from 'clsx';
 import React from 'react';
@@ -88,6 +87,13 @@ export default function TimeoutSlider(props: TimeoutSliderProps) {
       label: 'super fast',
     },
   ];
+
+  React.useEffect(() => {
+    if (light.leds.timeout && light.leds.timeout !== validTimeout) {
+      setTimeoutValue(light.leds.timeout);
+      setValidTimeout(light.leds.timeout);
+    }
+  }, [light]);
 
   return (
     <div className={clsx(styles.rootVertical, rootStyles)}>

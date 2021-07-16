@@ -221,7 +221,7 @@ export default function AmbientCard(props: AmbientCardProps) {
           </div>
         </>
       ) : (
-        <LightOff />
+        <LightOff text="In order to start the ambilight turn the light on first!" />
       )}
     </BasicCard>
   );

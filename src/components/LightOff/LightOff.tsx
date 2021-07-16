@@ -21,8 +21,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: 100,
   },
 }));
-export interface LightOffProps {}
+export interface LightOffProps {
+  text?: string;
+}
 export default function LightOff(props: LightOffProps) {
+  const { text } = props;
   const styles = useStyles();
   const light = useLight();
   return (
@@ -38,7 +41,7 @@ export default function LightOff(props: LightOffProps) {
         </IconButton>
       </Tooltip>
       <Typography variant="body2">
-        In order to start the ambilight turn the light on first!
+        {text ?? 'In order to change the light turn it on first!'}
       </Typography>
     </>
   );

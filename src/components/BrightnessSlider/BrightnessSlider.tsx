@@ -7,8 +7,15 @@ import { LightContextType } from '../LightProvider/LightProvider';
 const BrightnessSlider = (props: SliderProps) => {
   const light: LightContextType = useLight();
   const theme: Theme = useTheme();
+  const [value, setValue] = React.useState<number>(light.brightness);
+  React.useEffect(() => {
+    if (light.brightness !== value) {
+      setValue(light.brightness);
+    }
+  }, [light]);
   return (
     <Slider
+      value={value}
       color="secondary"
       valueLabelDisplay="auto"
       marks={[
@@ -21,6 +28,7 @@ const BrightnessSlider = (props: SliderProps) => {
       disabled={!light.isOn}
       onMouseDown={(e: MouseEvent) => e.stopPropagation()}
       onClick={(e: MouseEvent) => e.stopPropagation()}
+      onChange={(_e, val: number | number[]) => setValue(val as number)}
       onChangeCommitted={(event: React.ChangeEvent, value: number) => {
         light.setBrightness(value);
       }}
