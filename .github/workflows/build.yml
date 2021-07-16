@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 15
       - name: create config file
-        run: echo '{"baseUrl": "http://devlight.local"}' > src/config.json
+        run: 'echo ''{"baseUrl": "http://devlight.local"}'' > src/config.json'
       - name: Install dependencies
         run: yarn install
       - name: Package linux
@@ -35,7 +35,7 @@ jobs:
         with:
           node-version: 15
       - name: create config file
-        run: echo '{"baseUrl": "http://devlight.local"}' > src/config.json
+        run: 'echo ''{"baseUrl": "http://devlight.local"}'' > src/config.json'
       - name: Install dependencies
         run: yarn install
       - name: Package windows
