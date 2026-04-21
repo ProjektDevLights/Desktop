@@ -1,3 +1,6 @@
+> [!WARNING]
+> The DevLights project is deprecated and no longer maintained since July 2021.
+
 <img src=".erb/img/erb-banner.png" width="100%" />
 
 <br>
